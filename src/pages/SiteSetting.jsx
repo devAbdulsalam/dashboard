@@ -1,10 +1,12 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import AuthContext from '../context/authContext';
 import toast from 'react-hot-toast';
 import Loader from '../components/Loader';
 import axios from 'axios';
 // import { useNavigate } from 'react-router-dom';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import PaymentCheckbox from '../components/PaymentCheckBox';
+import { fetchSite } from '../hooks/axiosApis';
 // import { LocalStorage } from '../hooks/LocalStorage';
 const Currencies = [
 	{
@@ -67,17 +69,34 @@ const dateFormats = ['DD/MM/YY', 'MM/DD/YY', 'YY/MM/DD'];
 const SiteSetting = () => {
 	const { user } = useContext(AuthContext);
 	const apiUrl = import.meta.env.VITE_API_URL;
-	const [siteTitle, setSiteTitle] = useState('');
-	const [siteUrl, setSiteUrl] = useState('');
-	const [email, setEmail] = useState(user?.email);
-	const [discription, setDiscription] = useState('');
+	const [site, setSite] = useState('');
+	const { data, isLoading, error } = useQuery(['site'], async () =>
+		fetchSite()
+	);
+	useEffect(() => {
+		if (data) {
+			setSite(data);
+			console.log(data);
+			// navigate('/');
+		}
+		if (error) {
+			console.log(error);
+			toast.error(error?.message);
+		}
+	}, [data, error]);
+	const queryClient = useQueryClient();
+	const [siteTitle, setSiteTitle] = useState(site?.siteTitle);
+	const [siteUrl, setSiteUrl] = useState(site?.siteTitle);
+	const [email, setEmail] = useState(site?.siteTitle || user?.email);
+	const [description, setDescription] = useState(site?.description);
 	const [selectedFormat, setSelectedFormat] = useState('DD/MM/YY');
 	const [currencies, setCurrencies] = useState(Currencies);
 	const [selectedCurrency, setSelectedCurrency] = useState('dollar');
 	const [payments, setPayments] = useState(payment);
-	const [address, setAddress] = useState('');
+	const [address, setAddress] = useState(site.address);
 	const [postalCode, setPostalCode] = useState('');
-	const [isLoading, setIsLoading] = useState('');
+	const [loading, setIsLoading] = useState('');
+
 	// const navigate = useNavigate();
 	// useEffect(() => {
 	// 	if (user) {
@@ -98,7 +117,7 @@ const SiteSetting = () => {
 			const data = {
 				siteTitle,
 				adminEmail: email,
-				discription,
+				description,
 				paymentMethods: payments,
 				siteUrl,
 				currency: currencies,
@@ -111,6 +130,7 @@ const SiteSetting = () => {
 				.post(`${apiUrl}/management/site`, data)
 				.then((res) => {
 					console.log(res);
+					queryClient.invalidateQueries(['site']);
 					if (res.data) {
 						toast.success('Setting saved successfully');
 					}
@@ -191,8 +211,8 @@ const SiteSetting = () => {
 								<div className="">
 									<label className="text-black">Description</label>
 									<textarea
-										value={discription}
-										onChange={(e) => setDiscription(e.target.value)}
+										value={description}
+										onChange={(e) => setDescription(e.target.value)}
 										className="input py-4 rounded-md h-[200px] resize-none w-full border border-gray6  text-black"
 									></textarea>
 								</div>
@@ -324,7 +344,7 @@ const SiteSetting = () => {
 					</button>
 				</div>
 			</div>
-			{isLoading && <Loader />}
+			{isLoading || (loading && <Loader />)}
 		</>
 	);
 };

@@ -76,7 +76,7 @@ const fetchOrders = async (user) => {
 				Authorization: `Bearer ${user?.token}`,
 			},
 		};
-		const { data } = await axios.get(`${apiUrl}/management/order`, config);
+		const { data } = await axios.get(`${apiUrl}/management/orders`, config);
 		return data;
 	} catch (error) {
 		console.log(error.message);

@@ -12,7 +12,7 @@ const AddProduct = () => {
 	const apiUrl = import.meta.env.VITE_API_URL;
 	const [addProductTab, setAddProductTab] = useState(1);
 	const [name, setName] = useState('');
-	const [discription, setDiscription] = useState('');
+	const [description, setDescription] = useState('');
 	const [price, setPrice] = useState('');
 	const [sku, setSku] = useState('');
 	const [quantity, setQuantity] = useState('');
@@ -49,7 +49,7 @@ const AddProduct = () => {
 	const handleAddProduct = async () => {
 		const data = {
 			name,
-			discription,
+			description,
 			basePrice: price,
 			sku,
 			quantity,
@@ -70,8 +70,8 @@ const AddProduct = () => {
 		if (name === '') {
 			return toast.error('product name is required');
 		}
-		if (discription === '') {
-			return toast.error('product discription is required');
+		if (description === '') {
+			return toast.error('product description is required');
 		}
 		if (price === '') {
 			return toast.error('product price is required');
@@ -264,8 +264,8 @@ const AddProduct = () => {
 											<div className="mb-5">
 												<label className="text-black">Description</label>
 												<textarea
-													value={discription}
-													onChange={(e) => setDiscription(e.target.value)}
+													value={description}
+													onChange={(e) => setDescription(e.target.value)}
 													className="input py-4 rounded-md h-[200px] resize-none w-full border border-gray6  text-black"
 												></textarea>
 											</div>

@@ -14,12 +14,13 @@ const CustomersList = () => {
 	const apiUrl = import.meta.env.VITE_API_URL;
 	const [search, setSearch] = useState();
 	const [loading, setLoading] = useState();
+	const [users, setUsers] = useState([]);
 	const { data, isLoading, error } = useQuery(['customers'], async () =>
 		fetchCustomers(user)
 	);
 	useEffect(() => {
 		if (data) {
-			console.log(data);
+			setUsers(data);
 			// navigate('/');/
 		}
 		if (error) {
@@ -240,8 +241,8 @@ const CustomersList = () => {
 								</tr>
 							</thead>
 							<tbody>
-								{data?.length > 0 &&
-									data?.map((user) => {
+								{users?.length > 0 &&
+									users?.map((user) => {
 										return (
 											<tr
 												key={user._id}

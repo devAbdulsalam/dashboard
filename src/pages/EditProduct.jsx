@@ -20,7 +20,7 @@ const EditProduct = () => {
 	}, [selectedProduct, navigate]);
 	const [addProductTab, setAddProductTab] = useState(1);
 	const [name, setName] = useState(selectedProduct?.name);
-	const [discription, setDiscription] = useState(selectedProduct?.discription);
+	const [description, setDescription] = useState(selectedProduct?.description);
 	const [price, setPrice] = useState(selectedProduct?.basePrice);
 	const [sku, setSku] = useState(selectedProduct?.sku);
 	const [quantity, setQuantity] = useState(selectedProduct?.quantity);
@@ -61,7 +61,7 @@ const EditProduct = () => {
 	const handleUpdateProduct = async () => {
 		const data = {
 			name,
-			discription,
+			description,
 			basePrice: price,
 			sku,
 			quantity,
@@ -82,8 +82,8 @@ const EditProduct = () => {
 		if (name === '') {
 			return toast.error('product name is required');
 		}
-		if (discription === '') {
-			return toast.error('product discription is required');
+		if (description === '') {
+			return toast.error('product description is required');
 		}
 		if (price === '') {
 			return toast.error('product price is required');
@@ -248,8 +248,8 @@ const EditProduct = () => {
 											<div className="mb-5">
 												<label className="text-black">Description</label>
 												<textarea
-													value={discription}
-													onChange={(e) => setDiscription(e.target.value)}
+													value={description}
+													onChange={(e) => setDescription(e.target.value)}
 													className="input py-4 rounded-md h-[200px] resize-none w-full border border-gray6  text-black"
 												></textarea>
 											</div>
@@ -480,13 +480,13 @@ const EditProduct = () => {
 												{!image ? (
 													<img
 														className="w-[100px] h-auto mx-auto"
-														src="assets/img/icons/upload.png"
+														src={selectedProduct?.image?.url || "assets/img/icons/upload.png"}
 														alt=""
 													/>
 												) : (
 													<img
 														className="w-[100px] h-auto mx-auto"
-														src={image}
+														src={image || selectedProduct?.image?.url}
 														alt={imageName || name}
 													/>
 												)}

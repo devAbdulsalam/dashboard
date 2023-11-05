@@ -59,18 +59,46 @@ const Order = () => {
 	const handleDelete = async (order) => {
 		setSelectedProduct(order);
 	};
-	const handleDeleteProductCategory = async (category) => {
-		if (!category) {
-			return toast.error('category id is require');
+	const handleDeleteProductCategory = async (order) => {
+		if (!order) {
+			return toast.error('Order id is required');
 		}
 		try {
 			setLoading(true);
 			axios
-				.delete(`${apiUrl}/order/${category._id}`, config)
+				.delete(`${apiUrl}/order/${order._id}`, config)
 				.then((res) => {
 					console.log(res);
 					if (res.data) {
-						toast.success('Category deleted successfully');
+						toast.success('Order deleted successfully');
+					}
+					console.log(res);
+					queryClient.invalidateQueries(['orders', 'order']);
+				})
+				.catch((error) => {
+					console.log(error);
+					toast.error(error.message);
+				})
+				.finally(() => {
+					setLoading(false);
+				});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const handleSearch = async () => {
+		if (!search) {
+			return;
+		}
+		try {
+			setLoading(true);
+			axios
+				.delete(`${apiUrl}/order/search`, config)
+				.then((res) => {
+					console.log(res);
+					if (res.data) {
+						toast.success('Search successfully');
 					}
 					console.log(res);
 					queryClient.invalidateQueries(['category']);
@@ -117,7 +145,10 @@ const Order = () => {
 								value={search}
 								onChange={(e) => setSearch(e.target.value)}
 							/>
-							<button className="absolute top-1/2 left-5 translate-y-[-50%] hover:text-theme">
+							<button
+								onClick={handleSearch}
+								className="absolute top-1/2 left-5 translate-y-[-50%] hover:text-theme"
+							>
 								<svg
 									width="16"
 									height="16"

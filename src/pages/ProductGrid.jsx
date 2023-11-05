@@ -374,28 +374,39 @@ const ProductGrid = () => {
 									<div className="space-y-5 p-4">
 										<div className="flex justify-between">
 											<div>
-												<p className="font-light text-primary">
+												<p className="font-semibold text-lg text-primary">
 													Delete Product
 												</p>
 											</div>
 											<button
 												onClick={() => setShowDeleteProductModal(false)}
-												className="p-2 py-1.5 shadow rounded-full hover:bg-red-300 duration-150 ease-in-out"
+												className="m-1 p-2 py-1 shadow rounded-full hover:bg-red-300 duration-150 ease-in-out"
 											>
 												<i className="fa-solid fa-xmark text-xl text-red-300 hover:text-red-500" />
 											</button>
 										</div>
-										<div>
-											<p className="font-light text-center">
-												{selectedProduct?.name}
+										<div className="p-2">
+											<p className="text-center ">
+												Are you sure you want to delete this product?
 											</p>
+											<div className="flex items-center space-x-5">
+												<img
+													className="w-[60px] h-[60px] rounded-md"
+													src={
+														selectedProduct?.image?.url ||
+														selectedProduct?.image
+													}
+													alt={selectedProduct?.name}
+												/>
+												<p className=" text-center">{selectedProduct?.name}</p>
+											</div>
 										</div>
 										<button
-											className="bg-red-400 hover:bg-red-600 text-white h-10 w-full flex items-center justify-center rounded-md"
+											className="bg-red-500 hover:bg-red-400 text-white font-semibold h-10 py-1 w-full flex items-center justify-center rounded-md transition-all duration-500 ease-in-out"
 											onClick={() => handleDeleteProduct(selectedProduct)}
 										>
 											<span>Delete Product</span>
-											<i className="fa-solid fa-paper-plane text-2xl text-primary"></i>
+											<i className="fa-solid fa-delete text-2xl text-primary"></i>
 										</button>
 									</div>
 								</Dialog.Panel>
