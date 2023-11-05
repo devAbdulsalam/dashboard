@@ -69,7 +69,7 @@ const SiteSetting = () => {
 	const apiUrl = import.meta.env.VITE_API_URL;
 	const [siteTitle, setSiteTitle] = useState('');
 	const [siteUrl, setSiteUrl] = useState('');
-	const [email, setEmail] = useState('');
+	const [email, setEmail] = useState(user?.email);
 	const [discription, setDiscription] = useState('');
 	const [selectedFormat, setSelectedFormat] = useState('DD/MM/YY');
 	const [currencies, setCurrencies] = useState(Currencies);
@@ -96,7 +96,6 @@ const SiteSetting = () => {
 		try {
 			setIsLoading(true);
 			const data = {
-				owner: user._id,
 				siteTitle,
 				adminEmail: email,
 				discription,

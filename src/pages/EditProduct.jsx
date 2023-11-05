@@ -5,7 +5,7 @@ import AuthContext from '../context/authContext';
 import toast from 'react-hot-toast';
 import Loader from '../components/Loader';
 import axios from 'axios';
-import RadioInput from '../components/radioInput';
+import RadioInput from '../components/RadioInput';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 const EditProduct = () => {
