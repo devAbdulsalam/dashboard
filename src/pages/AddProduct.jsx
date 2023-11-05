@@ -2,7 +2,7 @@ import { useState, useRef, useContext } from 'react';
 import AuthContext from '../context/authContext';
 import toast from 'react-hot-toast';
 import Loader from '../components/Loader';
-import RadioInput from '../components/radioInput';
+import RadioInput from '../components/RadioInput';
 import axios from 'axios';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
