@@ -355,7 +355,7 @@ const Category = () => {
 											</tr>
 										</thead>
 										<tbody>
-											{data.length > 0 &&
+											{data?.length > 0 &&
 												data?.map((category) => (
 													<tr
 														key={category._id}

@@ -5,7 +5,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import AuthContext from '../context/authContext';
 import toast from 'react-hot-toast';
 import Loader from '../components/Loader';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 // import { Dialog, Transition } from '@headlessui/react';
 import axios from 'axios';
 
@@ -13,14 +13,18 @@ const Profile = () => {
 	const { user } = useContext(AuthContext);
 	// const [search, setSearch] = useState();
 	const apiUrl = import.meta.env.VITE_API_URL;
-	const [name, setName] = useState(user.name);
+	const [name, setName] = useState(user?.name);
+	const [lastName, setLastName] = useState(user?.name);
+	const [email, setEmail] = useState(user?.email);
+	const [phone, setPhone] = useState(user?.phone);
+	const [bio, setBio] = useState(user?.bio);
 	const [image, setImage] = useState(null);
 	const [imageName, setImageName] = useState(null);
 	const [imageFile, setImageFile] = useState(null);
 	const hiddenFileInput = useRef(null);
 	const [loading, setLoading] = useState(null);
 	const queryClient = useQueryClient();
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 	const config = {
 		headers: {
 			Authorization: `Bearer ${user?.token}`,
@@ -30,10 +34,12 @@ const Profile = () => {
 	const handleUpdateProfile = async () => {
 		const data = {
 			name,
+			email,
+			bio,
 		};
 
 		if (name === '') {
-			return toast.error('product name is required');
+			return toast.error('name is required');
 		}
 		setLoading(true);
 		try {
@@ -43,14 +49,13 @@ const Profile = () => {
 			}
 			formData.append('image', imageFile);
 			axios
-				.post(`${apiUrl}/product`, formData, config)
+				.patch(`${apiUrl}/user/${user?._id}`, formData, config)
 				.then((res) => {
 					if (res.data) {
-						toast.success('Product added successfully');
+						toast.success('Profile updated successfully');
 					}
 					console.log(res);
-					queryClient.invalidateQueries(['products']);
-					navigate('/products');
+					queryClient.invalidateQueries(['user']);
 				})
 				.catch((error) => {
 					toast.error(error.message);
@@ -170,10 +175,8 @@ const Profile = () => {
 							</label>
 						</div>
 						<div className="">
-							<h5 className="text-xl mb-0">Adeagbo Josiah</h5>
-							<p className="text-tiny mb-0">
-								Bringing knowledge to your fingertips with AI assistance
-							</p>
+							<h5 className="text-xl mb-0">{user?.name}</h5>
+							<p className="text-tiny mb-0">{user?.name}</p>
 						</div>
 					</div>
 				</div>
@@ -202,7 +205,8 @@ const Profile = () => {
 												className="input w-full h-[49px] rounded-md border border-gray6 px-6 text-base text-black"
 												type="text"
 												placeholder="Name"
-												value="Adeagbo"
+												value={lastName}
+												onChange={(e) => setLastName(e.target.value)}
 											/>
 										</div>
 									</div>
@@ -212,7 +216,8 @@ const Profile = () => {
 											className="input w-full h-[49px] rounded-md border border-gray6 px-6 text-base text-black"
 											type="email"
 											placeholder="Email"
-											value="speedafhost@g.com"
+											value={email}
+											onChange={(e) => setEmail(e.target.value)}
 										/>
 									</div>
 									<div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -222,17 +227,18 @@ const Profile = () => {
 												className="input w-full h-[49px] rounded-md border border-gray6 px-6 text-base text-black"
 												type="text"
 												placeholder="Phone"
-												value="+234 808 888 6823"
+												value={phone}
+												onChange={(e) => setPhone(e.target.value)}
 											/>
 										</div>
 										<div className="mb-5 profile-gender-select select-bordered">
 											<p className="mb-0 text-base text-black">Gender </p>
 											<select>
-												<option value="" selected>
+												<option value="male" selected>
 													Male
 												</option>
-												<option value="">Female</option>
-												<option value="">Others</option>
+												<option value="female">Female</option>
+												<option value="others">Others</option>
 											</select>
 										</div>
 									</div>
@@ -240,13 +246,18 @@ const Profile = () => {
 										<p className="mb-0 text-base text-black">Bio </p>
 										<textarea
 											className="input w-full h-[200px] py-4 rounded-md border border-gray6 px-6 text-base resize-none text-black"
-											placeholder="Bio"
-										>
-											Hi there, this is my bio...
-										</textarea>
+											placeholder="Hi there, this is my bio..."
+											value={bio}
+											onChange={(e) => setBio(e.target.value)}
+										></textarea>
 									</div>
 									<div className="text-end mt-5">
-										<button className="tp-btn px-10 py-2">Save</button>
+										<button
+											onClick={handleUpdateProfile}
+											className="tp-btn px-10 py-2"
+										>
+											Save
+										</button>
 									</div>
 								</div>
 							</div>
