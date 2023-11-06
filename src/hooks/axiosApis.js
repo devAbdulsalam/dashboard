@@ -137,7 +137,7 @@ const fetchProductCategory = async (prop) => {
 				Authorization: `Bearer ${user?.token}`,
 			},
 		};
-		const { data } = await axios.get(`${apiUrl}/category`, config);
+		const { data } = await axios.get(`${apiUrl}/product/category`, config);
 		return data;
 	} catch (error) {
 		console.log(error.message);

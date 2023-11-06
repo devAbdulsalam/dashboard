@@ -5,6 +5,7 @@ import { LocalStorage } from '../hooks/LocalStorage';
 export const AuthContextProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
 	const [token, setToken] = useState(null);
+	const [site, setSite] = useState('');
 	const [selectedProduct, setSelectedProduct] = useState('');
 	const [notification, setNotification] = useState([]);
 	const [groupInfo, setGroupInfo] = useState('');
@@ -35,6 +36,8 @@ export const AuthContextProvider = ({ children }) => {
 				setUser,
 				token,
 				setToken,
+				site,
+				setSite,
 				selectedProduct,
 				setSelectedProduct,
 				notification,

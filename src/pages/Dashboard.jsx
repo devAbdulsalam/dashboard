@@ -28,6 +28,7 @@ const Dashboard = () => {
 	useEffect(() => {
 		if (data) {
 			console.log(data);
+			// console.log(data?.recentOrders);
 			// navigate('/');/
 		}
 		if (error) {
@@ -413,7 +414,7 @@ const Dashboard = () => {
 									height="16"
 									width="16"
 									xmlns="http://www.w3.org/2000/svg"
-									xlink="http://www.w3.org/1999/xlink"
+									// xlink="http://www.w3.org/1999/xlink"
 									viewBox="0 0 469.333 469.333"
 								>
 									<g>
@@ -544,7 +545,7 @@ const Dashboard = () => {
 							</Link>
 						</div>
 						<div className="space-y-5">
-							{data?.transactions?.map((trc) => (
+							{data?.recentTransactions?.map((trc) => (
 								<div
 									key={trc._id}
 									className="flex flex-wrap items-center justify-between"
@@ -569,67 +570,6 @@ const Dashboard = () => {
 									<p className="font-medium text-success mb-0">${trc.cost}</p>
 								</div>
 							))}
-
-							<div className="flex flex-wrap items-center justify-between">
-								<div className="m-2 mb:sm-0 flex items-center space-x-3">
-									<div className="avatar">
-										<img
-											className="rounded-full w-10 h-10"
-											src="assets/img/users/user-7.jpg"
-											alt="avatar"
-										/>
-									</div>
-									<div>
-										<h4 className="text-base text-slate-700 mb-[6px] leading-none">
-											Josiah
-										</h4>
-										<p className="text-sm text-slate-400 line-clamp-1 m-0 leading-none">
-											Jan 15, 2023 - 10:30 AM
-										</p>
-									</div>
-								</div>
-								<p className="font-medium text-danger mb-0">$-80.40</p>
-							</div>
-							<div className="flex flex-wrap items-center justify-between">
-								<div className="m-2 mb:sm-0 flex items-center space-x-3">
-									<div className="avatar">
-										<img
-											className="rounded-full w-10 h-10"
-											src="assets/img/users/user-8.jpg"
-											alt="avatar"
-										/>
-									</div>
-									<div>
-										<h4 className="text-base text-slate-700 mb-[6px] leading-none">
-											Steve Smith
-										</h4>
-										<p className="text-sm text-slate-400 line-clamp-1 m-0 leading-none">
-											Feb 01, 2023 - 07:05 PM
-										</p>
-									</div>
-								</div>
-								<p className="font-medium text-success mb-0">$150.00</p>
-							</div>
-							<div className="flex flex-wrap items-center justify-between">
-								<div className="m-2 mb:sm-0 flex items-center space-x-3">
-									<div className="avatar">
-										<img
-											className="rounded-full w-10 h-10"
-											src="assets/img/users/user-9.jpg"
-											alt="avatar"
-										/>
-									</div>
-									<div>
-										<h4 className="text-base text-slate-700 mb-[6px] leading-none">
-											Robert Downy
-										</h4>
-										<p className="text-sm text-slate-400 line-clamp-1 m-0 leading-none">
-											Feb 21, 2023 - 11:22 PM
-										</p>
-									</div>
-								</div>
-								<p className="font-medium text-success mb-0">$1482.00</p>
-							</div>
 						</div>
 					</div>
 
@@ -685,7 +625,7 @@ const Dashboard = () => {
 										</tr>
 									</thead>
 									<tbody>
-										{data?.recentOrders?.map((order) => {
+										{data?.recentOrders?.map((order) => (
 											<tr
 												key={order._id}
 												className="bg-white border-b border-gray6 last:border-0 text-start"
@@ -695,18 +635,18 @@ const Dashboard = () => {
 														to={order._id}
 														className="font-medium text-heading text-hover-primary"
 													>
-														{order._id}
+														{order.name || order.firstName}
 													</Link>
 												</td>
 												<td className="px-3 py-3 font-normal text-slate-600">
 													#XY-25G
 												</td>
 												<td className="px-3 py-3 font-normal text-slate-600">
-													$2999.00
+													${order.totalPrice}
 												</td>
 												<td className="px-3 py-3">
 													<span className="text-[11px]  text-success px-3 py-1 rounded-md leading-none bg-success/10 font-medium">
-														Active
+														{order.isDelivered}
 													</span>
 												</td>
 												<td className="px-3 py-3 w-14">
@@ -717,87 +657,8 @@ const Dashboard = () => {
 														View
 													</button>
 												</td>
-											</tr>;
-										})}
-
-										<tr className="bg-white border-b border-gray6 last:border-0 text-start">
-											<td className="pr-8  whitespace-nowrap">
-												<a
-													href="#"
-													className="font-medium text-heading text-hover-primary"
-												>
-													Gigabyte Gaming Monitor 4K
-												</a>
-											</td>
-											<td className="px-3 py-3 font-normal text-slate-600">
-												#JK-10A
-											</td>
-											<td className="px-3 py-3 font-normal text-slate-600">
-												$599.00
-											</td>
-											<td className="px-3 py-3">
-												<span className="text-[11px]  text-danger px-3 py-1 rounded-md leading-none bg-danger/10 font-medium">
-													Disabled
-												</span>
-											</td>
-											<td className="px-3 py-3 w-14">
-												<button className="bg-info/10 text-info hover:bg-info hover:text-white inline-block text-center leading-5 text-tiny font-medium py-2 px-4 rounded-md ">
-													View
-												</button>
-											</td>
-										</tr>
-										<tr className="bg-white border-b border-gray6 last:border-0 text-start">
-											<td className="pr-8  whitespace-nowrap">
-												<a
-													href="#"
-													className="font-medium text-heading text-hover-primary"
-												>
-													Logitech G502 Hero Mouse
-												</a>
-											</td>
-											<td className="px-3 py-3 font-normal text-slate-600">
-												#LG-502
-											</td>
-											<td className="px-3 py-3 font-normal text-slate-600">
-												$1199.59
-											</td>
-											<td className="px-3 py-3">
-												<span className="text-[11px]  text-warning px-3 py-1 rounded-md leading-none bg-warning/10 font-medium">
-													Disabled
-												</span>
-											</td>
-											<td className="px-3 py-3 w-14">
-												<button className="bg-info/10 text-info hover:bg-info hover:text-white inline-block text-center leading-5 text-tiny font-medium py-2 px-4 rounded-md ">
-													View
-												</button>
-											</td>
-										</tr>
-										<tr className="bg-white border-b border-gray6 last:border-0 text-start">
-											<td className="pr-8  whitespace-nowrap">
-												<a
-													href="#"
-													className="font-medium text-heading text-hover-primary"
-												>
-													Galaxy S22 Ultra Gray
-												</a>
-											</td>
-											<td className="px-3 py-3 font-normal text-slate-600">
-												#GL-S22
-											</td>
-											<td className="px-3 py-3 font-normal text-slate-600">
-												$1800.00
-											</td>
-											<td className="px-3 py-3">
-												<span className="text-[11px]  text-success px-3 py-1 rounded-md leading-none bg-success/10 font-medium">
-													Active
-												</span>
-											</td>
-											<td className="px-3 py-3 w-14">
-												<button className="bg-info/10 text-info hover:bg-info hover:text-white inline-block text-center leading-5 text-tiny font-medium py-2 px-4 rounded-md ">
-													View
-												</button>
-											</td>
-										</tr>
+											</tr>
+										))}
 									</tbody>
 								</table>
 							</div>

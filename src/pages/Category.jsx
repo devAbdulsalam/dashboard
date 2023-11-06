@@ -26,9 +26,11 @@ const Category = () => {
 			toast.error(error?.message);
 		}
 	}, [data, error]);
-	const [discription, setDiscription] = useState('');
-	const [subCategory, setSubCategory] = useState('');
-	const [category, setCategory] = useState('');
+	const [name, setName] = useState('');
+	const [isParent, setIsParent] = useState(false);
+	const [description, setDescription] = useState('');
+	const [parent, setParent] = useState('');
+	const [slug, setSlug] = useState('');
 	const [image, setImage] = useState(null);
 	const [imageName, setImageName] = useState(null);
 	const [imageFile, setImageFile] = useState(null);
@@ -42,37 +44,37 @@ const Category = () => {
 			'Content-Type': 'multipart/form-data',
 		},
 	};
-	// const handleRadioChange = (type) => {
-	// 	setDiscountType(type);
-	// 	setDiscountPrice('');
-	// };
+	const handleRadioChange = () => {
+		setIsParent(!isParent);
+		setParent('');
+	};
 	const handleAddCategory = async () => {
 		const data = {
-			category,
-			subCategory,
+			name,
+			parent,
+			isParent,
+			description,
 		};
 
-		if (category === '') {
-			return toast.error('product name is required');
+		if (name === '') {
+			return toast.error('category name is required');
 		}
-		if (category === '') {
-			return toast.error('product discription is required');
+		if (description === '') {
+			return toast.error('category discription is required');
 		}
-		if (category === '') {
-			return toast.error('product price is required');
-		}
-		if (image === '') {
-			return toast.error('product image is required');
+		if (!imageFile) {
+			return toast.error('category image is required');
 		}
 		setLoading(true);
 		try {
+			console.log(data);
 			const formData = new FormData();
 			for (const key in data) {
 				formData.append(key, data[key]);
 			}
 			formData.append('image', imageFile);
 			axios
-				.post(`${apiUrl}/category`, formData, config)
+				.post(`${apiUrl}/product/category`, formData, config)
 				.then((res) => {
 					if (res.data) {
 						toast.success('Category added successfully');
@@ -246,6 +248,8 @@ const Category = () => {
 									className="input w-full h-[44px] rounded-md border border-gray6 px-6 text-base"
 									type="text"
 									placeholder="Name"
+									value={name}
+									onChange={(e) => setName(e.target.value)}
 								/>
 							</div>
 							{/* <!-- input --> */}
@@ -255,6 +259,8 @@ const Category = () => {
 									className="input w-full h-[44px] rounded-md border border-gray6 px-6 text-base"
 									type="text"
 									placeholder="Slug"
+									value={slug}
+									onChange={(e) => setSlug(e.target.value)}
 								/>
 							</div>
 							{/* <!-- input --> */}
@@ -262,8 +268,8 @@ const Category = () => {
 								<p className="mb-0 text-base text-black">Parent</p>
 								<div className="category-add-select select-bordered">
 									<select
-										value={subCategory}
-										onChange={(e) => setSubCategory(e.target.value)}
+										value={parent}
+										onChange={(e) => setParent(e.target.value)}
 									>
 										<option value="Electronics">Electronics</option>
 										<option value="Fashion">Fashion</option>
@@ -276,8 +282,8 @@ const Category = () => {
 							<div className="mb-6">
 								<p className="mb-0 text-base text-black">Description</p>
 								<textarea
-									value={discription}
-									onChange={(e) => setDiscription(e.target.value)}
+									value={description}
+									onChange={(e) => setDescription(e.target.value)}
 									className="input h-[150px] w-full py-3 resize-none"
 									placeholder="Description Here"
 								></textarea>
@@ -286,8 +292,8 @@ const Category = () => {
 							<div className="tp-checkbox flex items-center mb-5">
 								<input
 									id="product-1"
-									value={category}
-									onChange={(e) => setCategory(e.target.value)}
+									checked={isParent}
+									onChange={handleRadioChange}
 									type="checkbox"
 								/>
 								<label htmlFor="product-1" className="text-tiny">

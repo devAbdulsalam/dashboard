@@ -3,7 +3,7 @@ import AuthContext from '../context/authContext';
 import toast from 'react-hot-toast';
 import Loader from '../components/Loader';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 const Register = () => {
 	const { user } = useContext(AuthContext);
 	const apiUrl = import.meta.env.VITE_API_URL;
@@ -57,6 +57,10 @@ const Register = () => {
 			setIsLoading(false);
 		}
 	};
+	const backgroundImageUrl = 'url(assets/img/bg/login-bg.jpg)';
+	const bgImage = {
+		backgroundImage: backgroundImageUrl,
+	};
 	return (
 		<>
 			<div className="tp-main-wrapper h-screen">
@@ -65,8 +69,8 @@ const Register = () => {
 						<div className="grid grid-cols-12 shadow-lg bg-white overflow-hidden rounded-md ">
 							<div className="col-span-4 lg:col-span-6 relative h-full hidden lg:block">
 								<div
+									style={bgImage}
 									className="data-bg absolute top-0 left-0 w-full h-full bg-cover bg-no-repeat"
-									data-bg="assets/img/bg/login-bg.jpg"
 								></div>
 							</div>
 							<div className="col-span-12 lg:col-span-6 md:w-[500px] mx-auto my-auto  pt-[50px] py-[60px] px-5 md:px-[60px]">
@@ -76,9 +80,9 @@ const Register = () => {
 										Already have an account?{' '}
 										<span>
 											{' '}
-											<a href="/login" className="text-theme">
+											<Link to="/login" className="text-theme">
 												Sign In
-											</a>{' '}
+											</Link>{' '}
 										</span>
 									</p>
 								</div>

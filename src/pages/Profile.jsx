@@ -10,7 +10,7 @@ import Loader from '../components/Loader';
 import axios from 'axios';
 
 const Profile = () => {
-	const { user } = useContext(AuthContext);
+	const { user, setUser } = useContext(AuthContext);
 	// const [search, setSearch] = useState();
 	const apiUrl = import.meta.env.VITE_API_URL;
 	const [name, setName] = useState(user?.name);
@@ -18,6 +18,7 @@ const Profile = () => {
 	const [email, setEmail] = useState(user?.email);
 	const [phone, setPhone] = useState(user?.phone);
 	const [bio, setBio] = useState(user?.bio);
+	const [gender, setGender] = useState(user?.gender);
 	const [image, setImage] = useState(null);
 	const [imageName, setImageName] = useState(null);
 	const [imageFile, setImageFile] = useState(null);
@@ -34,12 +35,15 @@ const Profile = () => {
 	const handleUpdateProfile = async () => {
 		const data = {
 			name,
+			firstname: name,
+			lastName,
 			email,
+			phone,
 			bio,
+			gender,
 		};
-
-		if (name === '') {
-			return toast.error('name is required');
+		if (email === '') {
+			return toast.error('email is required');
 		}
 		setLoading(true);
 		try {
@@ -47,14 +51,17 @@ const Profile = () => {
 			for (const key in data) {
 				formData.append(key, data[key]);
 			}
+
 			formData.append('image', imageFile);
+			// formData.append('coverImage', coverImageFile);
 			axios
-				.patch(`${apiUrl}/user/${user?._id}`, formData, config)
+				.patch(`${apiUrl}/management/${user?._id}`, formData, config)
 				.then((res) => {
 					if (res.data) {
 						toast.success('Profile updated successfully');
 					}
 					console.log(res);
+					setUser({ ...res?.data, token: user?.token });
 					queryClient.invalidateQueries(['user']);
 				})
 				.catch((error) => {
@@ -97,6 +104,10 @@ const Profile = () => {
 	const handleClick = () => {
 		hiddenFileInput.current.click();
 	};
+	const backgroundImageUrl = "url(assets/img/bg/profile-header.jpg)"
+	const bgImage = {
+		backgroundImage: backgroundImageUrl,
+	};
 	return (
 		<>
 			<div className="body-content px-8 py-8 bg-slate-100">
@@ -111,7 +122,7 @@ const Profile = () => {
 				<div className="bg-white rounded-md overflow-hidden mb-10">
 					<div className="relative h-[200px] w-full">
 						<div
-							data-bg="assets/img/bg/profile-header.jpg"
+							style={bgImage}
 							className="data-bg absolute top-0 left-0 w-full h-full bg-no-repeat bg-cover"
 						></div>
 						<input type="file" id="coverPhoto" onClick={handleClick} />
@@ -140,12 +151,21 @@ const Profile = () => {
 					</div>
 					<div className="px-8 pb-8 relative">
 						<div className="-mt-[75px] mb-3 relative inline-block">
-							<img
-								className="w-[150px] h-[150px] rounded-[14px] border-4 border-white bg-white"
-								src={image || 'assets/img/users/user-4.jpg'}
-								alt={imageName || name}
-								onClick={handleClick}
-							/>
+							{!image ? (
+								<img
+									className="w-[100px] h-auto mx-auto"
+									src={
+										user?.image?.url || 'assets/img/icons/upload.png'
+									}
+									alt={user?.name}
+								/>
+							) : (
+								<img
+									className="w-[100px] h-auto mx-auto"
+									src={image || user?.image?.url}
+									alt={imageName || name}
+								/>
+							)}
 							<input
 								type="file"
 								id="profilePhoto"
@@ -233,7 +253,10 @@ const Profile = () => {
 										</div>
 										<div className="mb-5 profile-gender-select select-bordered">
 											<p className="mb-0 text-base text-black">Gender </p>
-											<select>
+											<select
+												value={gender}
+												onChange={(e) => setGender(e.target.value)}
+											>
 												<option value="male" selected>
 													Male
 												</option>

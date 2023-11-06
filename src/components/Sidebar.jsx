@@ -9,7 +9,7 @@ import { fetchSite } from '../hooks/axiosApis';
 const Sidebar = ({ sideMenu, setSideMenu }) => {
 	const navigate = useNavigate();
 	const [nav, setNav] = useState(null);
-	const { setUser, setToken } = useContext(AuthContext);
+	const { setUser, setToken, setSite } = useContext(AuthContext);
 	const [isLogoutModal, setIsLogoutModal] = useState(false);
 	const handleNav = (number) => {
 		nav !== number ? setNav(number) : setNav(null);
@@ -32,9 +32,10 @@ const Sidebar = ({ sideMenu, setSideMenu }) => {
 	};
 	useEffect(() => {
 		if (data) {
+			setSite(data);
 			console.log(data);
 		}
-	}, [data]);
+	}, [data, setSite]);
 
 	useEffect(() => {
 		// Initial check on component mount
@@ -112,7 +113,7 @@ const Sidebar = ({ sideMenu, setSideMenu }) => {
 					</div>
 					<div className="px-4 py-5">
 						<ul>
-							<li>
+							<li onClick={handleSideBar}>
 								<NavLink
 									to={'/'}
 									onClick={() => handleNav(0)}
@@ -512,7 +513,7 @@ const Sidebar = ({ sideMenu, setSideMenu }) => {
 					</div>
 				</div>
 			</aside>
-			{/*  Delete Logout alert modal */}
+			{/*  Logout alert modal */}
 			<Transition appear show={isLogoutModal} as={Fragment}>
 				<Dialog as="div" className="relative" onClose={() => {}}>
 					<Transition.Child

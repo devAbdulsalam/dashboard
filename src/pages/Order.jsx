@@ -59,7 +59,7 @@ const Order = () => {
 	const handleDelete = async (order) => {
 		setSelectedProduct(order);
 	};
-	const handleDeleteProductCategory = async (order) => {
+	const handleDeleteOrder = async (order) => {
 		if (!order) {
 			return toast.error('Order id is required');
 		}
@@ -187,9 +187,9 @@ const Order = () => {
 								</select>
 							</div>
 							<div className="product-add-btn flex ">
-								<a href="/add-product" className="tp-btn">
+								<Link to={"/add-product"} className="tp-btn">
 									Add Product
-								</a>
+								</Link>
 							</div>
 						</div>
 					</div>
@@ -252,9 +252,9 @@ const Order = () => {
 							</thead>
 							<tbody>
 								{data?.length > 0 &&
-									data?.map((category) => (
+									data?.map((order) => (
 										<tr
-											key={category._id}
+											key={order._id}
 											className="bg-white border-b border-gray6 last:border-0 text-start mx-9"
 										>
 											<td className="pr-3  whitespace-nowrap">
@@ -264,25 +264,28 @@ const Order = () => {
 												</div>
 											</td>
 											<td className="pr-8 py-5 whitespace-nowrap">
-												<a href="#" className="flex items-center space-x-5">
+												<Link
+													to={`/orders/${order._id}`}
+													className="flex items-center space-x-5"
+												>
 													<img
 														className="w-[60px] h-[60px] rounded-md"
 														src="assets/img/product/prodcut-1.jpg"
 														alt=""
 													/>
 													<span className="font-medium text-heading text-hover-primary transition">
-														Whitetails Ws Open Sky
+														{order.name || order.firstName}
 													</span>
-												</a>
+												</Link>
 											</td>
 											<td className="px-3 py-3 font-normal text-[#55585B] text-end">
 												#479063DR
 											</td>
 											<td className="px-3 py-3 font-normal text-[#55585B] text-end">
-												37
+												{order?.cart?.length}
 											</td>
 											<td className="px-3 py-3 font-normal text-[#55585B] text-end">
-												$171.00
+												${order.totalPrice}
 											</td>
 											<td className="px-3 py-3 font-normal text-heading text-end">
 												<div className="flex justify-end items-center space-x-1 text-tiny">
@@ -297,7 +300,7 @@ const Order = () => {
 											</td>
 											<td className="px-3 py-3 text-end">
 												<span className="text-[11px]  text-success px-3 py-1 rounded-md leading-none bg-success/10 font-medium text-end">
-													Active
+													{order.isDelivered}
 												</span>
 											</td>
 											<td className="px-9 py-3 text-end">
@@ -306,10 +309,10 @@ const Order = () => {
 														<button
 															className="w-10 h-10 leading-10 text-tiny bg-success text-white rounded-md hover:bg-green-600"
 															onMouseEnter={() =>
-																handleMouseEnterEdit(category._id)
+																handleMouseEnterEdit(order._id)
 															}
 															onMouseLeave={handleMouseLeaveEdit}
-															onClick={() => handleEdit(category)}
+															onClick={() => handleEdit(order)}
 															aria-label="Edit"
 														>
 															<svg
@@ -329,7 +332,7 @@ const Order = () => {
 																/>
 															</svg>
 														</button>
-														{showEditTooltip === category._id && (
+														{showEditTooltip === order._id && (
 															<div className="tooltip-container">
 																<span className="tooltip-content text-tiny whitespace-no-wrap">
 																	Edit
@@ -342,10 +345,10 @@ const Order = () => {
 														<button
 															className="w-10 h-10 leading-[33px] text-tiny bg-white border border-gray text-slate-600 rounded-md hover:bg-danger hover:border-danger hover:text-white"
 															onMouseEnter={() =>
-																handleMouseEnterDelete(category._id)
+																handleMouseEnterDelete(order._id)
 															}
-															onMouseLeave={() => handleMouseLeaveDelete}
-															onClick={() => handleDelete(category)}
+															onMouseLeave={handleMouseLeaveDelete}
+															onClick={() => handleDelete(order)}
 														>
 															<svg
 																className="-translate-y-px"
@@ -365,7 +368,7 @@ const Order = () => {
 																/>
 															</svg>
 														</button>
-														{showDeleteTooltip === category._id && (
+														{showDeleteTooltip === order._id && (
 															<div className="flex flex-col items-center z-50 absolute left-1/2 -translate-x-1/2 bottom-full mb-1">
 																<span className="relative z-10 p-2 text-tiny leading-none font-medium text-white whitespace-no-wrap w-max bg-slate-800 rounded py-1 px-2 inline-block">
 																	Delete
@@ -490,9 +493,7 @@ const Order = () => {
 										</div>
 										<button
 											className="bg-red-400 hover:bg-red-600 text-white h-10 w-full flex items-center justify-center rounded-md"
-											onClick={() =>
-												handleDeleteProductCategory(selectedProduct)
-											}
+											onClick={() => handleDeleteOrder(selectedProduct)}
 										>
 											<span>Delete Product</span>
 											<i className="fa-solid fa-paper-plane text-2xl text-primary"></i>

@@ -8,7 +8,7 @@ const ProtectedRoutes = () => {
 	return user ? (
 		<Outlet />
 	) : (
-		<Navigate to="/" state={{ path: location.pathname }} replace />
+		<Navigate to="/login" state={{ path: location.pathname }} replace />
 	);
 };
 

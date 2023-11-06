@@ -351,7 +351,7 @@ const Header = ({ sideMenu, setSideMenu }) => {
 							>
 								<img
 									className="w-[40px] h-[40px] rounded-md"
-									src={user?.image || 'assets/img/users/user-10.jpg'}
+									src={user?.image?.url}
 									alt={user?.name}
 								/>
 								<span className="w-[12px] h-[12px] inline-block bg-green-500 rounded-full absolute -top-[4px] -right-[4px] border-[2px] border-white"></span>
@@ -369,13 +369,17 @@ const Header = ({ sideMenu, setSideMenu }) => {
 									className="absolute w-[280px] top-full right-0 shadow-lg rounded-md bg-white py-5 px-5"
 								>
 									<div className="flex items-center space-x-3 border-b border-gray pb-3 mb-2">
-										<div className="">
+										<Link
+											to={'./profile'}
+											className=""
+											onClick={() => setUserOption(!userOption)}
+										>
 											<img
 												className="w-[50px] h-[50px] rounded-md"
-												src={user?.image || 'assets/img/users/user-10.jpg'}
+												src={user?.image?.url}
 												alt={user?.name}
 											/>
-										</div>
+										</Link>
 										<div className="">
 											<h5 className="text-base mb-1 leading-none">
 												{user?.name}
@@ -388,7 +392,7 @@ const Header = ({ sideMenu, setSideMenu }) => {
 									<ul>
 										<li>
 											<Link
-												to={'index.html'}
+												to={'./'}
 												className="px-5 py-2 w-full block hover:bg-gray rounded-md hover:text-theme text-base"
 											>
 												Dashboard
@@ -396,7 +400,7 @@ const Header = ({ sideMenu, setSideMenu }) => {
 										</li>
 										<li>
 											<Link
-												to={'/profile'}
+												to={'./profile'}
 												className="px-5 py-2 w-full block hover:bg-gray rounded-md hover:text-theme text-base"
 											>
 												Account Settings
@@ -491,7 +495,7 @@ const Header = ({ sideMenu, setSideMenu }) => {
 					onClick={() => setSearchOverlay(!searchOverlay)}
 				></div>
 			</header>
-			{/*  Delete Logout alert modal */}
+			{/*  Logout alert modal */}
 			<Transition appear show={isLogoutModal} as={Fragment}>
 				<Dialog as="div" className="relative" onClose={() => {}}>
 					<Transition.Child
@@ -517,31 +521,35 @@ const Header = ({ sideMenu, setSideMenu }) => {
 								leaveFrom="opacity-100 scale-100"
 								leaveTo="opacity-0 scale-95"
 							>
-								<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all font-josefin">
-									<div className="space-y-5 p-4">
-										<div className="flex justify-between">
-											<div>
-												<p className="font-light text-primary">
-													Delete Product
-												</p>
-											</div>
-											<button
-												onClick={() => setIsLogoutModal(false)}
-												className="p-2 py-1.5 shadow rounded-full hover:bg-red-300 duration-150 ease-in-out"
-											>
-												<i className="fa-solid fa-xmark text-xl text-red-300 hover:text-red-500" />
-											</button>
-										</div>
+								<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-xl bg-white text-left align-middle shadow-xl transition-all font-josefin">
+									<div className="flex justify-between px-5 pt-4">
 										<div>
-											<p className="font-light text-center">{user?.name}</p>
+											<p className="font-light text-primary"></p>
 										</div>
 										<button
-											className="bg-red-400 hover:bg-red-600 text-white h-10 w-full flex items-center justify-center rounded-md"
-											onClick={handleLogOut}
+											onClick={() => setIsLogoutModal(false)}
+											className="p-2 py-1 my-1 shadow rounded-full hover:bg-red-300 duration-150 ease-in-out"
 										>
-											<span>Delete Product</span>
-											<i className="fa-solid fa-paper-plane text-2xl text-primary"></i>
+											<i className="fa-solid fa-xmark text-xl text-red-300 hover:text-red-500" />
 										</button>
+									</div>
+									<div className="container mx-auto my-auto flex items-center justify-center">
+										<div className="w-[500px] mx-auto my-auto  pt-[20px] pb-[20px] px-[20px]">
+											<div className="text-center">
+												<h4 className="text-[24px] mb-1">Log out</h4>
+												<p className="mt-3 text-lg md:text-xl">
+													Are you sure you want to log out?
+												</p>
+											</div>
+											<div className="pt-[10px]">
+												<button
+													className="bg-red-400 hover:bg-red-600 text-white h-10 w-full flex items-center justify-center rounded-md"
+													onClick={handleLogOut}
+												>
+													<span className="text-lg">Log out</span>
+												</button>
+											</div>
+										</div>
 									</div>
 								</Dialog.Panel>
 							</Transition.Child>

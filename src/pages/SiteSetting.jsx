@@ -67,9 +67,8 @@ const payment = [
 const dateFormats = ['DD/MM/YY', 'MM/DD/YY', 'YY/MM/DD'];
 
 const SiteSetting = () => {
-	const { user } = useContext(AuthContext);
+	const { user, site, setSite } = useContext(AuthContext);
 	const apiUrl = import.meta.env.VITE_API_URL;
-	const [site, setSite] = useState('');
 	const { data, isLoading, error } = useQuery(['site'], async () =>
 		fetchSite()
 	);
@@ -83,30 +82,27 @@ const SiteSetting = () => {
 			console.log(error);
 			toast.error(error?.message);
 		}
-	}, [data, error]);
+	}, [data, error, setSite]);
 	const queryClient = useQueryClient();
 	const [siteTitle, setSiteTitle] = useState(site?.siteTitle);
-	const [siteUrl, setSiteUrl] = useState(site?.siteTitle);
-	const [email, setEmail] = useState(site?.siteTitle || user?.email);
+	const [siteUrl, setSiteUrl] = useState(site?.siteUrl);
+	const [email, setEmail] = useState(site?.adminEmail || user?.email);
 	const [description, setDescription] = useState(site?.description);
 	const [selectedFormat, setSelectedFormat] = useState('DD/MM/YY');
-	const [currencies, setCurrencies] = useState(Currencies);
+	const [currencies, setCurrencies] = useState(site?.currency || Currencies);
 	const [selectedCurrency, setSelectedCurrency] = useState('dollar');
-	const [payments, setPayments] = useState(payment);
-	const [address, setAddress] = useState(site.address);
-	const [postalCode, setPostalCode] = useState('');
+	const [payments, setPayments] = useState(site?.payment || payment);
+	const [address, setAddress] = useState(site?.address);
+	const [postalCode, setPostalCode] = useState(site?.postalCode);
 	const [loading, setIsLoading] = useState('');
 
-	// const navigate = useNavigate();
-	// useEffect(() => {
-	// 	if (user) {
-	// 		navigate('/');
-	// 	}
-	// });
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		if (siteTitle === '' || siteUrl === '') {
-			return toast.error('error.message');
+		if (siteTitle === '') {
+			return toast.error('Site name is required');
+		}
+		if (siteUrl === '') {
+			return toast.error('Site url is required');
 		}
 		const atLeastOneChecked = payments.some((method) => method.active);
 		if (!atLeastOneChecked) {
@@ -125,14 +121,14 @@ const SiteSetting = () => {
 				address,
 				postalCode,
 			};
-			console.log(data);
 			axios
 				.post(`${apiUrl}/management/site`, data)
 				.then((res) => {
-					console.log(res);
+					// console.log(res);
+					setSite(res.data);
 					queryClient.invalidateQueries(['site']);
 					if (res.data) {
-						toast.success('Setting saved successfully');
+						toast.success('Setting updated successfully');
 					}
 				})
 				.catch((error) => {

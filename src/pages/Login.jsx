@@ -3,7 +3,7 @@ import AuthContext from '../context/authContext';
 import toast from 'react-hot-toast';
 import Loader from '../components/Loader';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { LocalStorage } from '../hooks/LocalStorage';
 const Login = () => {
 	const { user, setUser } = useContext(AuthContext);
@@ -35,7 +35,8 @@ const Login = () => {
 					}
 					setUser({ ...res.data.user, token: res.data.token });
 					LocalStorage.set('user', { ...res.data.user, token: res.data.token });
-					LocalStorage.set('token', user.token);
+					console.log(user);
+					// LocalStorage.set('token', user.token);
 					if (rememberMe) {
 						LocalStorage.set('rememberMe', 'true');
 						LocalStorage.set('username', user);
@@ -56,6 +57,10 @@ const Login = () => {
 			setIsLoading(false);
 		}
 	};
+	const backgroundImageUrl = 'url(assets/img/bg/login-bg.jpg)';
+	const bgImage = {
+		backgroundImage: backgroundImageUrl,
+	};
 	return (
 		<>
 			<div className="tp-main-wrapper h-screen">
@@ -64,8 +69,8 @@ const Login = () => {
 						<div className="grid grid-cols-12 shadow-lg bg-white overflow-hidden rounded-md ">
 							<div className="col-span-4 lg:col-span-6 relative h-full hidden lg:block">
 								<div
+									style={bgImage}
 									className="data-bg absolute top-0 left-0 w-full h-full bg-cover bg-no-repeat"
-									data-bg="assets/img/bg/login-bg.jpg"
 								></div>
 							</div>
 							<div className="col-span-12 lg:col-span-6 md:w-[500px] mx-auto my-auto  pt-[50px] py-[60px] px-5 md:px-[60px]">
@@ -126,6 +131,17 @@ const Login = () => {
 											</a>
 										</div>
 									</form>
+								</div>
+								<div className="text-center text-sm text-gray-900 mt-4">
+									<div className="text-gray-500 mt-2.5">
+										Not have a account ?
+										<Link
+											to={'/register'}
+											className="text-gray-800 hover:text-emerald-500 font-bold mx-2"
+										>
+											Register
+										</Link>
+									</div>
 								</div>
 							</div>
 						</div>
