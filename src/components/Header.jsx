@@ -366,7 +366,7 @@ const Header = ({ sideMenu, setSideMenu }) => {
 									// x-transition:leave="transition ease-in duration-200 origin-top"
 									// x-transition:leave-start="opacity-100 scale-y-200"
 									// x-transition:leave-end="opacity-0 scale-y-90"
-									className="absolute w-[280px] top-full right-0 shadow-lg rounded-md bg-white py-5 px-5"
+									className="absolute w-[280px] top-full right-0 shadow-lg rounded-md bg-white py-5 px-5 z-10"
 								>
 									<div className="flex items-center space-x-3 border-b border-gray pb-3 mb-2">
 										<Link
@@ -390,7 +390,7 @@ const Header = ({ sideMenu, setSideMenu }) => {
 										</div>
 									</div>
 									<ul>
-										<li>
+										<li onClick={() => setUserOption(!userOption)}>
 											<Link
 												to={'./'}
 												className="px-5 py-2 w-full block hover:bg-gray rounded-md hover:text-theme text-base"
@@ -398,7 +398,7 @@ const Header = ({ sideMenu, setSideMenu }) => {
 												Dashboard
 											</Link>
 										</li>
-										<li>
+										<li onClick={() => setUserOption(!userOption)}>
 											<Link
 												to={'./profile'}
 												className="px-5 py-2 w-full block hover:bg-gray rounded-md hover:text-theme text-base"

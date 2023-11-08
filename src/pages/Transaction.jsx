@@ -1,28 +1,38 @@
 // import React from 'react'
 import { useQuery } from '@tanstack/react-query';
-import { fetchProduct } from '../hooks/axiosApis';
+import { fetchTransaction } from '../hooks/axiosApis';
 import { useState, useContext, useEffect } from 'react';
 import AuthContext from '../context/authContext';
 import toast from 'react-hot-toast';
 import Loader from '../components/Loader';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 const Transaction = () => {
-	const { user } = useContext(AuthContext);
-	// const navigate = useNavigate();
-	// const [search, setSearch] = useState();
-	const { data, isLoading, error } = useQuery(['products'], async () =>
-		fetchProduct(user)
+	const { user, selectedProduct, setSelectedProduct } = useContext(AuthContext);
+	const [transaction, setTransaction] = useState('');
+	const { id } = useParams();
+	const navigate = useNavigate();
+	useEffect(() => {
+		if (!selectedProduct) {
+			navigate('/transactions');
+		}
+		console.log(selectedProduct);
+	}, [selectedProduct, navigate]);
+	const info = { token: user.token, id: selectedProduct._id };
+	const { data, isLoading, error } = useQuery(['transactions', id], async () =>
+		fetchTransaction(info)
 	);
 	useEffect(() => {
 		if (data) {
 			console.log(data);
+			console.log(transaction);
+			setTransaction(data);
 			// navigate('/');/
 		}
 		if (error) {
 			console.log(error);
 			toast.error(error?.message);
 		}
-	}, [data, error]);
+	}, [data, transaction, error]);
 	return (
 		<>
 			<div className="body-content px-8 py-8 bg-slate-100">
@@ -59,7 +69,7 @@ const Transaction = () => {
 								<div className="">
 									<div className="mb-6">
 										<h5 className="mb-0 text-base">Transaction ID:</h5>
-										<p className="mb-0 text-tiny">#479063DR</p>
+										<p className="mb-0 text-tiny">#{setSelectedProduct?._id}</p>
 									</div>
 									<div className="mb-6">
 										<h5 className="mb-0 text-base">Customer:</h5>
@@ -80,7 +90,7 @@ const Transaction = () => {
 										<p className="mb-0 text-tiny ml-3">
 											1.{' '}
 											<a href="#" className="text-hover-primary">
-												Whitetails Women's Open Sky
+												Whitetails Open Sky
 											</a>{' '}
 											<span className="font-medium">(x2)</span>
 										</p>

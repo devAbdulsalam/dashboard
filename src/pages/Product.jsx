@@ -241,7 +241,11 @@ const Product = () => {
 													>
 														<img
 															className="w-[60px] h-[60px] rounded-md"
-															src={product?.image?.url || product?.image}
+															src={
+																product?.image?.url ||
+																product?.image ||
+																'assets/img/product/prodcut-1.jpg'
+															}
 															alt={product?.name}
 														/>
 														<span className="font-medium text-heading text-hover-primary transition">

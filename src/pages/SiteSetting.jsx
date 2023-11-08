@@ -89,13 +89,18 @@ const SiteSetting = () => {
 	const [email, setEmail] = useState(site?.adminEmail || user?.email);
 	const [description, setDescription] = useState(site?.description);
 	const [selectedFormat, setSelectedFormat] = useState('DD/MM/YY');
-	const [currencies, setCurrencies] = useState(site?.currency || Currencies);
+	const [currencies, setCurrencies] = useState(Currencies);
 	const [selectedCurrency, setSelectedCurrency] = useState('dollar');
 	const [payments, setPayments] = useState(site?.payment || payment);
 	const [address, setAddress] = useState(site?.address);
 	const [postalCode, setPostalCode] = useState(site?.postalCode);
 	const [loading, setIsLoading] = useState('');
-
+	const config = {
+		headers: {
+			Authorization: `Bearer ${user?.token}`,
+			'Content-Type': 'multipart/form-data',
+		},
+	};
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (siteTitle === '') {
@@ -122,7 +127,7 @@ const SiteSetting = () => {
 				postalCode,
 			};
 			axios
-				.post(`${apiUrl}/management/site`, data)
+				.patch(`${apiUrl}/management/site`, data, config)
 				.then((res) => {
 					// console.log(res);
 					setSite(res.data);

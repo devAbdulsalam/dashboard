@@ -17,15 +17,6 @@ export const AuthContextProvider = ({ children }) => {
 			setToken(token);
 		}
 	};
-	// useEffect(() => {
-	// 	const rememberMe = LocalStorage.get('rememberMe');
-	// 	const username = LocalStorage.get('username');
-
-	// 	if (rememberMe === 'true' && username) {
-	// 		console.log(username);
-	// 	}
-	// }, []);
-
 	useEffect(() => {
 		fetchUser();
 	}, []);

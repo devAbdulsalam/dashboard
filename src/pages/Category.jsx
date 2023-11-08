@@ -45,16 +45,28 @@ const Category = () => {
 		},
 	};
 	const handleRadioChange = () => {
-		setIsParent(!isParent);
-		setParent('');
+		if (parent) {
+			setParent(() => '');
+		}
+		setIsParent(() => !isParent);
+	};
+	const handleSelectOptionChange = (e) => {
+		if (isParent) {
+			setIsParent(() => !isParent);
+		}
+		setParent(() => e.target.value);
 	};
 	const handleAddCategory = async () => {
 		const data = {
 			name,
 			parent,
+			slug,
 			isParent,
 			description,
 		};
+
+		console.log(parent);
+		console.log();
 
 		if (name === '') {
 			return toast.error('category name is required');
@@ -64,6 +76,9 @@ const Category = () => {
 		}
 		if (!imageFile) {
 			return toast.error('category image is required');
+		}
+		if (!isParent && !parent) {
+			return toast.error('select category type is required');
 		}
 		setLoading(true);
 		try {
@@ -267,10 +282,7 @@ const Category = () => {
 							<div className="mb-6">
 								<p className="mb-0 text-base text-black">Parent</p>
 								<div className="category-add-select select-bordered">
-									<select
-										value={parent}
-										onChange={(e) => setParent(e.target.value)}
-									>
+									<select value={parent} onChange={handleSelectOptionChange}>
 										<option value="Electronics">Electronics</option>
 										<option value="Fashion">Fashion</option>
 										<option value="Jewellery">Jewellery</option>
@@ -374,7 +386,7 @@ const Category = () => {
 															</div>
 														</td>
 														<td className="px-3 py-3 font-normal text-[#55585B]">
-															#{category._id}
+															#{category._id.slice(-6)}
 														</td>
 														<td className="pr-8 py-5 whitespace-nowrap">
 															<a
@@ -383,7 +395,7 @@ const Category = () => {
 															>
 																<img
 																	className="w-10 h-10 rounded-full"
-																	src="assets/img/product/prodcut-1.jpg"
+																	src={category.image.url}
 																	alt={category.name}
 																/>
 																<span className="font-medium text-heading text-hover-primary transition">
@@ -392,10 +404,10 @@ const Category = () => {
 															</a>
 														</td>
 														<td className="px-3 py-3 font-normal text-[#55585B] text-end">
-															{category.name}
+															{category.description}
 														</td>
 														<td className="px-3 py-3 font-normal text-[#55585B] text-end">
-															/fashion
+															{category.slug}
 														</td>
 														<td className="px-3 py-3 font-normal text-[#55585B] text-end">
 															78

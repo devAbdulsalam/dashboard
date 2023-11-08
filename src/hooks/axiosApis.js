@@ -46,7 +46,7 @@ const fetchCoupons = async (user) => {
 				Authorization: `Bearer ${user?.token}`,
 			},
 		};
-		const { data } = await axios.get(`${apiUrl}/coupon`, config);
+		const { data } = await axios.get(`${apiUrl}/management/coupon`, config);
 		return data;
 	} catch (error) {
 		console.log(error.message);
@@ -144,17 +144,29 @@ const fetchProductCategory = async (prop) => {
 		return error;
 	}
 };
-
-const updateUser = async ({ user, info }) => {
+const fetchTransactions = async (prop) => {
 	try {
 		const config = {
 			headers: {
-				Authorization: `Bearer ${user?.token}`,
+				Authorization: `Bearer ${prop?.token}`,
 			},
 		};
-		const { data } = await axios.post(
-			`${apiUrl}/user/older-user`,
-			info,
+		const { data } = await axios.get(`${apiUrl}/transactions`, config);
+		return data;
+	} catch (error) {
+		console.log(error.message);
+		return error;
+	}
+};
+const fetchTransaction = async (prop) => {
+	try {
+		const config = {
+			headers: {
+				Authorization: `Bearer ${prop?.token}`,
+			},
+		};
+		const { data } = await axios.get(
+			`${apiUrl}/transactions/${prop.id}`,
 			config
 		);
 		return data;
@@ -174,5 +186,6 @@ export {
 	fetchCustomers,
 	fetchCustomer,
 	fetchProductCategory,
-	updateUser,
+	fetchTransactions,
+	fetchTransaction,
 };
