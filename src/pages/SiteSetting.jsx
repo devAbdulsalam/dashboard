@@ -87,6 +87,7 @@ const SiteSetting = () => {
 	const [siteTitle, setSiteTitle] = useState(site?.siteTitle);
 	const [siteUrl, setSiteUrl] = useState(site?.siteUrl);
 	const [email, setEmail] = useState(site?.adminEmail || user?.email);
+	const [phone, setPhone] = useState(site?.phone || user?.phone);
 	const [description, setDescription] = useState(site?.description);
 	const [selectedFormat, setSelectedFormat] = useState('DD/MM/YY');
 	const [currencies, setCurrencies] = useState(Currencies);
@@ -118,6 +119,7 @@ const SiteSetting = () => {
 			const data = {
 				siteTitle,
 				adminEmail: email,
+				phone,
 				description,
 				paymentMethods: payments,
 				siteUrl,
@@ -253,6 +255,22 @@ const SiteSetting = () => {
 						</div>
 						<div className="grid grid-cols-12 px-6 py-6 gap-6 items-center">
 							<div className="col-span-12 sm:col-span-5 lg:col-span-4">
+								<h6 className="mb-0">Administration Phone</h6>
+							</div>
+							<div className="col-span-12 sm:col-span-7 lg:col-span-8">
+								<div className="">
+									<input
+										type="text"
+										className="input rounded-md h-11 w-full border border-gray6 text-black"
+										placeholder="shahnewaz@mail.com"
+										value={phone}
+										onChange={(e) => setPhone(e.target.value)}
+									/>
+								</div>
+							</div>
+						</div>
+						<div className="grid grid-cols-12 px-6 py-6 gap-6 items-center">
+							<div className="col-span-12 sm:col-span-5 lg:col-span-4">
 								<h6 className="mb-0">Default Currency</h6>
 							</div>
 							<div className="col-span-12 sm:col-span-7 lg:col-span-8">
@@ -345,7 +363,7 @@ const SiteSetting = () => {
 					</button>
 				</div>
 			</div>
-			{isLoading || (loading && <Loader />)}
+			{isLoading || loading ? <Loader /> : ''}
 		</>
 	);
 };

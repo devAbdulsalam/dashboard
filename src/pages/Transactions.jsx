@@ -60,7 +60,7 @@ const Transaction = () => {
 							<input
 								className="input h-[44px] w-full pl-14"
 								type="text"
-								placeholder="Search by ID"
+								placeholder="Search by Id, amount or date"
 							/>
 							<button className="absolute top-1/2 left-5 translate-y-[-50%] hover:text-theme">
 								<svg
@@ -121,7 +121,7 @@ const Transaction = () => {
 										scope="col"
 										className="px-3 py-3 text-tiny text-text2 uppercase font-semibold w-[250px] text-end"
 									>
-										Ammount
+										Amount
 									</th>
 									<th
 										scope="col"
@@ -151,7 +151,7 @@ const Transaction = () => {
 											className="bg-white border-b border-gray6 last:border-0 text-start mx-9"
 										>
 											<td className="px-3 py-3 font-normal text-[#55585B]">
-												#{transaction._id}
+												#{transaction._id.slice(-6)}
 											</td>
 											<td className="px-3 py-3 font-normal text-[#55585B] text-end">
 												<div className="flex items-center space-x-5">

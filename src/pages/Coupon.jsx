@@ -412,7 +412,7 @@ const Coupon = () => {
 					</div>
 				</div>
 			</div>
-			{isLoading || (loading && <Loader />)}
+			{isLoading || loading ? <Loader /> : ''}
 			<Transition appear show={isDeleteProductModal} as={Fragment}>
 				<Dialog as="div" className="relative" onClose={() => {}}>
 					<Transition.Child

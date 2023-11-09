@@ -322,7 +322,7 @@ const CustomersList = () => {
 																onMouseEnter={() =>
 																	handleMouseEnterDelete(user._id)
 																}
-																onMouseLeave={() => handleMouseLeaveDelete}
+																onMouseLeave={handleMouseLeaveDelete}
 																onClick={() => handleDelete(user)}
 															>
 																<svg
@@ -421,7 +421,7 @@ const CustomersList = () => {
 					</div>
 				</div>
 			</div>
-			{isLoading || (loading && <Loader />)}
+			{isLoading || loading ? <Loader /> : ''}
 			<Transition appear show={isDeleteProductModal} as={Fragment}>
 				<Dialog as="div" className="relative" onClose={() => {}}>
 					<Transition.Child
@@ -433,7 +433,7 @@ const CustomersList = () => {
 						leaveFrom="opacity-100"
 						leaveTo="opacity-0"
 					>
-						<div className="fixed inset-0 bg-black/70 bg-opacity-25 z-50" />
+						<div className="fixed inset-0 bg-black/70 bg-opacity-25 z-20" />
 					</Transition.Child>
 
 					<div className="fixed inset-0 overflow-y-auto flex place-content-center z-50">

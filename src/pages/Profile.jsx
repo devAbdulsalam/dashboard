@@ -24,12 +24,18 @@ const Profile = () => {
 	const [imageFile, setImageFile] = useState(null);
 	const hiddenFileInput = useRef(null);
 	const [loading, setLoading] = useState(null);
+	const [newPassword, setNewPassword] = useState('');
+	const [oldPassword, setOldPassword] = useState('');
+	const [cPassword, setCPassword] = useState('');
+	const [likeNotification, setLinkeNotification] = useState(false);
+	const [postNotification, setPostNotification] = useState(false);
+	const [orderNotification, setOrderNotification] = useState(false);
 	const queryClient = useQueryClient();
 	// const navigate = useNavigate();
 	const config = {
 		headers: {
 			Authorization: `Bearer ${user?.token}`,
-			'Content-Type': 'multipart/form-data',
+			// 'Content-Type': 'multipart/form-data',
 		},
 	};
 	const handleUpdateProfile = async () => {
@@ -47,6 +53,7 @@ const Profile = () => {
 		}
 		setLoading(true);
 		try {
+			// console.log(config);
 			const formData = new FormData();
 			for (const key in data) {
 				formData.append(key, data[key]);
@@ -55,7 +62,12 @@ const Profile = () => {
 			formData.append('image', imageFile);
 			// formData.append('coverImage', coverImageFile);
 			axios
-				.patch(`${apiUrl}/management/${user?._id}`, formData, config)
+				.patch(`${apiUrl}/management/${user?._id}`, formData, {
+					headers: {
+						Authorization: `Bearer ${user?.token}`,
+						'Content-Type': 'multipart/form-data',
+					},
+				})
 				.then((res) => {
 					if (res.data) {
 						toast.success('Profile updated successfully');
@@ -73,6 +85,83 @@ const Profile = () => {
 				});
 		} catch (error) {
 			setLoading(false);
+			console.log(error);
+		}
+	};
+	const handleUpdatePassword = async () => {
+		const data = {
+			newPassword,
+			oldPassword,
+		};
+		if (newPassword === '') {
+			return toast.error('New Password is required');
+		}
+		if (oldPassword === '') {
+			return toast.error('Old Password is required');
+		}
+		if (newPassword === oldPassword) {
+			return toast.error('Current password and new password must be different');
+		}
+		if (newPassword !== cPassword) {
+			return toast.error('New password and comfirm password must match');
+		}
+		setLoading(true);
+		try {
+			axios
+				.patch(`${apiUrl}/management/change-password`, data, config)
+				.then((res) => {
+					if (res.data) {
+						toast.success('Password updated successfully');
+					}
+					console.log(res);
+					setUser({ ...res?.data, token: user?.token });
+					queryClient.invalidateQueries(['user']);
+				})
+				.catch((error) => {
+					toast.error(error.message);
+					console.log(error);
+				})
+				.finally(() => {
+					setLoading(false);
+				});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+	const handleUpdateNotification = async () => {
+		const data = {
+			likeNotification,
+			orderNotification,
+			postNotification,
+		};
+		if (data) {
+			console.log(data);
+			return;
+			// toast.error('new Password is required');
+		}
+		// if (newPassword === '') {
+		// 	return toast.error('old Password is required');
+		// }
+		setLoading(true);
+		try {
+			axios
+				.patch(`${apiUrl}/management/admin-notification`, data, config)
+				.then((res) => {
+					if (res.data) {
+						toast.success('Notification updated successfully');
+					}
+					console.log(res);
+					setUser({ ...res?.data, token: user?.token });
+					queryClient.invalidateQueries(['user']);
+				})
+				.catch((error) => {
+					toast.error(error.message);
+					console.log(error);
+				})
+				.finally(() => {
+					setLoading(false);
+				});
+		} catch (error) {
 			console.log(error);
 		}
 	};
@@ -104,7 +193,7 @@ const Profile = () => {
 	const handleClick = () => {
 		hiddenFileInput.current.click();
 	};
-	const backgroundImageUrl = "url(assets/img/bg/profile-header.jpg)"
+	const backgroundImageUrl = 'url(assets/img/bg/profile-header.jpg)';
 	const bgImage = {
 		backgroundImage: backgroundImageUrl,
 	};
@@ -154,9 +243,7 @@ const Profile = () => {
 							{!image ? (
 								<img
 									className="w-[100px] h-auto mx-auto"
-									src={
-										user?.image?.url || 'assets/img/icons/upload.png'
-									}
+									src={user?.image?.url || 'assets/img/icons/upload.png'}
 									alt={user?.name}
 								/>
 							) : (
@@ -291,21 +378,51 @@ const Profile = () => {
 
 								<div className="space-y-3 flex flex-col">
 									<div className="tp-checkbox flex items-center mb-3 sm:mb-0">
-										<input id="follows" type="checkbox" />
 										<label htmlFor="follows">
+											<input
+												id="follows"
+												type="checkbox"
+												className="mr-1"
+												checked={likeNotification}
+												onChange={() => setLinkeNotification(!likeNotification)}
+											/>
 											Like & Follows Notifications
 										</label>
 									</div>
 									<div className="tp-checkbox flex items-center mb-3 sm:mb-0">
-										<input id="comments" type="checkbox" />
 										<label htmlFor="comments">
+											<input
+												id="comments"
+												type="checkbox"
+												className="mr-1"
+												checked={postNotification}
+												onChange={() => setPostNotification(!postNotification)}
+											/>
 											Post, Comments & Replies Notifications
 										</label>
 									</div>
 									<div className="tp-checkbox flex items-center mb-3 sm:mb-0">
-										<input id="order" type="checkbox" />
-										<label htmlFor="order">New Order Notifications</label>
+										<label htmlFor="order">
+											<input
+												id="order"
+												type="checkbox"
+												className="mr-1"
+												checked={orderNotification}
+												onChange={() =>
+													setOrderNotification(!orderNotification)
+												}
+											/>
+											New Order Notifications
+										</label>
 									</div>
+								</div>
+								<div className="text-end mt-5">
+									<button
+										onClick={handleUpdateNotification}
+										className="tp-btn px-10 py-2"
+									>
+										Save
+									</button>
 								</div>
 							</div>
 							<div className="py-10 px-10 bg-white rounded-md">
@@ -320,7 +437,8 @@ const Profile = () => {
 											className="input w-full h-[49px] rounded-md border border-gray6 px-6 text-base text-black"
 											type="password"
 											placeholder="Current Passowrd"
-											value="123456"
+											value={oldPassword}
+											onChange={(e) => setOldPassword(e.target.value)}
 										/>
 									</div>
 									<div className="mb-5">
@@ -329,7 +447,8 @@ const Profile = () => {
 											className="input w-full h-[49px] rounded-md border border-gray6 px-6 text-base text-black"
 											type="password"
 											placeholder="New Password"
-											value="123456"
+											value={newPassword}
+											onChange={(e) => setNewPassword(e.target.value)}
 										/>
 									</div>
 									<div className="mb-5">
@@ -340,12 +459,13 @@ const Profile = () => {
 											className="input w-full h-[49px] rounded-md border border-gray6 px-6 text-base text-black"
 											type="password"
 											placeholder="Confirm Password"
-											value="123456"
+											value={cPassword}
+											onChange={(e) => setCPassword(e.target.value)}
 										/>
 									</div>
 									<div className="text-end mt-5">
 										<button
-											onClick={handleUpdateProfile}
+											onClick={handleUpdatePassword}
 											className="tp-btn px-10 py-2"
 										>
 											Save

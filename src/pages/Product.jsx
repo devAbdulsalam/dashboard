@@ -46,7 +46,7 @@ const Product = () => {
 		}
 	}, [data, error]);
 	const handleDelete = (product) => {
-		console.log(product);
+		// console.log(product);
 		setShowDeleteProductModal(true);
 		setSelectedProduct(product);
 	};
@@ -59,6 +59,7 @@ const Product = () => {
 	const queryClient = useQueryClient();
 	const handleDeleteProduct = async (product) => {
 		setLoading(true);
+		setShowDeleteProductModal(false);
 		try {
 			axios
 				.delete(`${apiUrl}/product/${product._id}`, config)
@@ -71,10 +72,11 @@ const Product = () => {
 				.catch((error) => {
 					toast.error(error.message);
 					console.log(error);
+					setShowDeleteProductModal(true);
 				})
 				.finally(() => {
 					setLoading(false);
-					setShowDeleteProductModal(false);
+					// setShowDeleteProductModal(false);
 					setSelectedProduct('');
 				});
 		} catch (error) {
@@ -332,7 +334,7 @@ const Product = () => {
 																onMouseEnter={() =>
 																	handleMouseEnterDelete(product._id)
 																}
-																onMouseLeave={() => handleMouseLeaveDelete}
+																onMouseLeave={handleMouseLeaveDelete}
 																onClick={() => handleDelete(product)}
 															>
 																<svg
@@ -436,7 +438,7 @@ const Product = () => {
 					</div>
 				</div>
 			</div>
-			{isLoading || (loading && <Loader />)}
+			{isLoading || loading ? <Loader /> : ''}
 			{/*  Delete product alert modal */}
 			<Transition appear show={isDeleteProductModal} as={Fragment}>
 				<Dialog as="div" className="relative" onClose={() => {}}>

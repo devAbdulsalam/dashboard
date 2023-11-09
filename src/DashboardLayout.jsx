@@ -5,7 +5,7 @@ import Sidebar from './components/Sidebar';
 const DashboardLayout = () => {
 	const [sideMenu, setSideMenu] = useState(null);
 	return (
-		<div className="tp-main-wrapper bg-slate-100 h-screen">
+		<div className="tp-main-wrapper bg-slate-100 h-screen relative">
 			<Sidebar sideMenu={sideMenu} setSideMenu={setSideMenu} />
 
 			<div
