@@ -32,7 +32,7 @@ const fetchProduct = async (user) => {
 				Authorization: `Bearer ${user?.token}`,
 			},
 		};
-		const { data } = await axios.get(`${apiUrl}/product`, config);
+		const { data } = await axios.get(`${apiUrl}/products`, config);
 		return data;
 	} catch (error) {
 		console.log(error.message);

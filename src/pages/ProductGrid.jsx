@@ -61,7 +61,7 @@ const ProductGrid = () => {
 		setLoading(true);
 		try {
 			axios
-				.delete(`${apiUrl}/product/${product._id}`, config)
+				.delete(`${apiUrl}/products/${product._id}`, config)
 				.then((res) => {
 					if (res.data) {
 						toast.success('Product deleted successfully');
@@ -173,9 +173,9 @@ const ProductGrid = () => {
 										<div className="relative">
 											<a href="#">
 												<img
-													className="w-full"
-													src="assets/img/product/prodcut-1.jpg"
-													alt=""
+													className="w-full object-cover"
+													src={product.image.url || "assets/img/product/prodcut-1.jpg"}
+													alt={product.name}
 												/>
 											</a>
 											<div className="absolute top-5 right-5 z-10">

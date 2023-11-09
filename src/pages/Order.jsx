@@ -187,7 +187,7 @@ const Order = () => {
 								</select>
 							</div>
 							<div className="product-add-btn flex ">
-								<Link to={"/add-product"} className="tp-btn">
+								<Link to={'/add-product'} className="tp-btn">
 									Add Product
 								</Link>
 							</div>

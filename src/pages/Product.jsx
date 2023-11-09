@@ -62,7 +62,7 @@ const Product = () => {
 		setShowDeleteProductModal(false);
 		try {
 			axios
-				.delete(`${apiUrl}/product/${product._id}`, config)
+				.delete(`${apiUrl}/products/${product._id}`, config)
 				.then((res) => {
 					if (res.data) {
 						toast.success('Product deleted successfully');

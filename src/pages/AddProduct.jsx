@@ -23,7 +23,7 @@ const AddProduct = () => {
 	const [cost, setCost] = useState('');
 	const discountOptions = ['no discount', 'fixed discount', 'percent discount'];
 	const [discountType, setDiscountType] = useState(discountOptions[0]);
-	const [discountPrice, setDiscountPrice] = useState('');
+	const [discount, setDiscount] = useState('');
 	const [color, setColor] = useState('');
 	const [size, setsize] = useState('');
 	const [tag, setTag] = useState('');
@@ -44,7 +44,7 @@ const AddProduct = () => {
 	};
 	const handleRadioChange = (type) => {
 		setDiscountType(type);
-		setDiscountPrice('');
+		setDiscount('');
 	};
 	const handleAddProduct = async () => {
 		const data = {
@@ -55,7 +55,7 @@ const AddProduct = () => {
 			quantity,
 			vat,
 			discountType,
-			discountPrice,
+			discount,
 			shippingCost: cost,
 			width,
 			weight,
@@ -90,7 +90,7 @@ const AddProduct = () => {
 			}
 			formData.append('image', imageFile);
 			axios
-				.post(`${apiUrl}/product`, formData, config)
+				.post(`${apiUrl}/products`, formData, config)
 				.then((res) => {
 					if (res.data) {
 						toast.success('Product added successfully');
@@ -355,18 +355,17 @@ const AddProduct = () => {
 												</div>
 												<div>
 													{discountType === 'fixed discount' && (
-														<div className="mb-5 mx-6">
+														<div className="mb-5">
 															<p className="mb-0 text-base text-black">
-																Price <span className="text-red">*</span>
+																Discount Price{' '}
+																<span className="text-red">*</span>
 															</p>
 															<input
 																className="input w-full h-[44px] rounded-md border border-gray6 px-6 text-base"
 																type="number"
 																placeholder="Price"
-																value={discountPrice}
-																onChange={(e) =>
-																	setDiscountPrice(e.target.value)
-																}
+																value={discount}
+																onChange={(e) => setDiscount(e.target.value)}
 															/>
 														</div>
 													)}
@@ -380,10 +379,8 @@ const AddProduct = () => {
 																type="number"
 																id="example_id"
 																name="example_name"
-																value={discountPrice}
-																onChange={(e) =>
-																	setDiscountPrice(e.target.value)
-																}
+																value={discount}
+																onChange={(e) => setDiscount(e.target.value)}
 															/>
 														</div>
 													)}

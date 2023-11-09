@@ -33,8 +33,8 @@ const EditProduct = () => {
 	const [discountType, setDiscountType] = useState(
 		selectedProduct?.discountType
 	);
-	const [discountPrice, setDiscountPrice] = useState(
-		selectedProduct?.discountPrice
+	const [discount, setDiscount] = useState(
+		selectedProduct?.discount
 	);
 	const [color, setColor] = useState(selectedProduct?.color);
 	const [size, setsize] = useState(selectedProduct?.size);
@@ -56,7 +56,7 @@ const EditProduct = () => {
 
 	const handleRadioChange = (type) => {
 		setDiscountType(type);
-		setDiscountPrice('');
+		setDiscount('');
 	};
 	const handleUpdateProduct = async () => {
 		const data = {
@@ -67,7 +67,7 @@ const EditProduct = () => {
 			quantity,
 			vat,
 			discountType,
-			discountPrice,
+			discount,
 			shippingCost: cost,
 			width,
 			weight,
@@ -102,7 +102,7 @@ const EditProduct = () => {
 			}
 			formData.append('image', imageFile);
 			axios
-				.patch(`${apiUrl}/product/${selectedProduct._id}`, formData, config)
+				.patch(`${apiUrl}/products/${selectedProduct._id}`, formData, config)
 				.then((res) => {
 					if (res.data) {
 						toast.success('Product updated successfully');
@@ -339,18 +339,17 @@ const EditProduct = () => {
 												</div>
 												<div>
 													{discountType === 'fixed discount' && (
-														<div className="mb-5 mx-6">
+														<div className="mb-5">
 															<p className="mb-0 text-base text-black">
-																Price <span className="text-red">*</span>
+																Discount Price{' '}
+																<span className="text-red">*</span>
 															</p>
 															<input
 																className="input w-full h-[44px] rounded-md border border-gray6 px-6 text-base"
 																type="number"
 																placeholder="Price"
-																value={discountPrice}
-																onChange={(e) =>
-																	setDiscountPrice(e.target.value)
-																}
+																value={discount}
+																onChange={(e) => setDiscount(e.target.value)}
 															/>
 														</div>
 													)}
@@ -364,10 +363,8 @@ const EditProduct = () => {
 																type="number"
 																id="example_id"
 																name="example_name"
-																value={discountPrice}
-																onChange={(e) =>
-																	setDiscountPrice(e.target.value)
-																}
+																value={discount}
+																onChange={(e) => setDiscount(e.target.value)}
 															/>
 														</div>
 													)}
@@ -480,7 +477,10 @@ const EditProduct = () => {
 												{!image ? (
 													<img
 														className="w-[100px] h-auto mx-auto"
-														src={selectedProduct?.image?.url || "assets/img/icons/upload.png"}
+														src={
+															selectedProduct?.image?.url ||
+															'assets/img/icons/upload.png'
+														}
 														alt=""
 													/>
 												) : (
