@@ -21,7 +21,7 @@ const EditProduct = () => {
 	const [addProductTab, setAddProductTab] = useState(1);
 	const [name, setName] = useState(selectedProduct?.name);
 	const [description, setDescription] = useState(selectedProduct?.description);
-	const [price, setPrice] = useState(selectedProduct?.basePrice);
+	const [price, setPrice] = useState(selectedProduct?.price);
 	const [sku, setSku] = useState(selectedProduct?.sku);
 	const [quantity, setQuantity] = useState(selectedProduct?.quantity);
 	const [vat, setVat] = useState(selectedProduct?.vat);
@@ -61,8 +61,7 @@ const EditProduct = () => {
 	const handleUpdateProduct = async () => {
 		const data = {
 			name,
-			description,
-			basePrice: price,
+			description, price,
 			sku,
 			quantity,
 			vat,

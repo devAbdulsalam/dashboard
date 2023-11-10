@@ -174,7 +174,10 @@ const ProductGrid = () => {
 											<a href="#">
 												<img
 													className="w-full object-cover"
-													src={product.image.url || "assets/img/product/prodcut-1.jpg"}
+													src={
+														product.image.url ||
+														'assets/img/product/prodcut-1.jpg'
+													}
 													alt={product.name}
 												/>
 											</a>
@@ -273,7 +276,7 @@ const ProductGrid = () => {
 											</div>
 											<div className="leading-none mb-2">
 												<span className="text-base font-medium text-black">
-													${product.basePrice}
+													${product.price}
 												</span>
 											</div>
 										</div>

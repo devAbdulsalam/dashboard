@@ -50,7 +50,7 @@ const AddProduct = () => {
 		const data = {
 			name,
 			description,
-			basePrice: price,
+			price,
 			sku,
 			quantity,
 			vat,
