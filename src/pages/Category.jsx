@@ -8,7 +8,8 @@ import Loader from '../components/Loader';
 import axios from 'axios';
 import { useQueryClient } from '@tanstack/react-query';
 import { Dialog, Transition } from '@headlessui/react';
-// import { useNavigate } from 'react-router-dom';
+import SelectOptions from '../components/SelectOptions';
+import { Link } from 'react-router-dom';
 const Category = () => {
 	const { user, selectedProduct, setSelectedProduct } = useContext(AuthContext);
 	const apiUrl = import.meta.env.VITE_API_URL;
@@ -16,9 +17,11 @@ const Category = () => {
 	const { data, isLoading, error } = useQuery(['category'], async () =>
 		fetchProductCategory(user)
 	);
+	const [parentCategories, setParentCategories] = useState('');
 	useEffect(() => {
-		if (data) {
-			console.log(data);
+		if (data && data.length > 0) {
+			setParentCategories(() => data.filter((item) => item.isParent));
+			// console.log(data);
 			// navigate('/');/
 		}
 		if (error) {
@@ -56,46 +59,54 @@ const Category = () => {
 		}
 		setParent(() => e.target.value);
 	};
+	// console.log(parentCategories);
 	const handleAddCategory = async () => {
-		const data = {
-			name,
-			parent,
-			slug,
-			isParent,
-			description,
-		};
-
-		console.log(parent);
-		console.log();
-
 		if (name === '') {
 			return toast.error('category name is required');
 		}
 		if (description === '') {
 			return toast.error('category discription is required');
 		}
-		if (!imageFile) {
-			return toast.error('category image is required');
+		if (isParent && !imageFile) {
+			return toast.error('Image is required for parent category');
 		}
 		if (!isParent && !parent) {
 			return toast.error('select category type is required');
 		}
+		// check if the catecory is already exist
+		const categoryAlreadyExist = data.find(
+			(item) => item.name.toLowerCase() === name.toLowerCase()
+		);
+		// also check if the user is already selected to avoid dublicate
+		if (categoryAlreadyExist || data.includes(name.toLowerCase())) {
+			toast.error('Category already added');
+			return;
+		}
 		setLoading(true);
 		try {
-			console.log(data);
+			const data = {
+				name,
+				parent,
+				slug,
+				isParent,
+				description,
+			};
 			const formData = new FormData();
 			for (const key in data) {
 				formData.append(key, data[key]);
 			}
 			formData.append('image', imageFile);
 			axios
-				.post(`${apiUrl}/product/category`, formData, config)
+				.post(`${apiUrl}/products/category`, formData, config)
 				.then((res) => {
 					if (res.data) {
 						toast.success('Category added successfully');
 					}
 					console.log(res);
 					queryClient.invalidateQueries(['category']);
+					setName('');
+					setDescription('');
+					setSlug('');
 				})
 				.catch((error) => {
 					toast.error(error.message);
@@ -160,6 +171,8 @@ const Category = () => {
 		setSelectedProduct(category);
 	};
 	const handleDelete = async (category) => {
+		console.log(category);
+		setShowDeleteProductModal(true);
 		setSelectedProduct(category);
 	};
 	const handleDeleteProductCategory = async (category) => {
@@ -169,7 +182,7 @@ const Category = () => {
 		try {
 			setLoading(true);
 			axios
-				.post(`${apiUrl}/category/${category._id}`, config)
+				.delete(`${apiUrl}/products/category/${category._id}`, config)
 				.then((res) => {
 					console.log(res);
 					if (res.data) {
@@ -184,6 +197,7 @@ const Category = () => {
 				})
 				.finally(() => {
 					setLoading(false);
+					setShowDeleteProductModal(false);
 				});
 		} catch (error) {
 			console.log(error);
@@ -281,14 +295,19 @@ const Category = () => {
 							{/* <!-- input --> */}
 							<div className="mb-6">
 								<p className="mb-0 text-base text-black">Parent</p>
-								<div className="category-add-select select-bordered">
+								<SelectOptions
+									options={parentCategories}
+									selected={parent}
+									handleSelectOptionChange={handleSelectOptionChange}
+								/>
+								{/* <div className="category-add-select select-bordered">
 									<select value={parent} onChange={handleSelectOptionChange}>
 										<option value="Electronics">Electronics</option>
 										<option value="Fashion">Fashion</option>
 										<option value="Jewellery">Jewellery</option>
 										<option value="Grocery">Grocery</option>
-									</select>
-								</div>
+									</select> 
+								</div> */}
 							</div>
 							{/* <!-- input --> */}
 							<div className="mb-6">
@@ -389,8 +408,8 @@ const Category = () => {
 															#{category._id.slice(-6)}
 														</td>
 														<td className="pr-8 py-5 whitespace-nowrap">
-															<a
-																href="#"
+															<Link
+																to={`category/${category._id}`}
 																className="flex items-center space-x-5"
 															>
 																<img
@@ -401,7 +420,7 @@ const Category = () => {
 																<span className="font-medium text-heading text-hover-primary transition">
 																	{category.name}
 																</span>
-															</a>
+															</Link>
 														</td>
 														<td className="px-3 py-3 font-normal text-[#55585B] text-end">
 															{category.description}
@@ -456,7 +475,7 @@ const Category = () => {
 																		onMouseEnter={() =>
 																			handleMouseEnterDelete(category._id)
 																		}
-																		onMouseLeave={() => handleMouseLeaveDelete}
+																		onMouseLeave={handleMouseLeaveDelete}
 																		onClick={() => handleDelete(category)}
 																	>
 																		<svg
@@ -495,7 +514,7 @@ const Category = () => {
 								</div>
 							</div>
 							<div className="flex justify-between items-center flex-wrap">
-								<p className="mb-0 text-tiny">Showing 10 Prdouct of 120</p>
+								<p className="mb-0 text-tiny">Showing 10 Prdouct of {data?.length}</p>
 								<div className="pagination py-3 flex justify-end items-center">
 									<a
 										href="#"
@@ -558,6 +577,7 @@ const Category = () => {
 				</div>
 			</div>
 			{isLoading || loading ? <Loader /> : ''}
+			{/*  Delete product alert modal */}
 			<Transition appear show={isDeleteProductModal} as={Fragment}>
 				<Dialog as="div" className="relative" onClose={() => {}}>
 					<Transition.Child
@@ -587,30 +607,41 @@ const Category = () => {
 									<div className="space-y-5 p-4">
 										<div className="flex justify-between">
 											<div>
-												<p className="font-light text-primary">
+												<p className="font-semibold text-lg text-primary">
 													Delete Product
 												</p>
 											</div>
 											<button
 												onClick={() => setShowDeleteProductModal(false)}
-												className="p-2 py-1.5 shadow rounded-full hover:bg-red-300 duration-150 ease-in-out"
+												className="m-1 p-2 py-1 shadow rounded-full hover:bg-red-300 duration-150 ease-in-out"
 											>
 												<i className="fa-solid fa-xmark text-xl text-red-300 hover:text-red-500" />
 											</button>
 										</div>
-										<div>
-											<p className="font-light text-center">
-												{selectedProduct?.name}
+										<div className="p-2">
+											<p className="text-center ">
+												Are you sure you want to delete this category?
 											</p>
+											<div className="flex items-center space-x-5">
+												<img
+													className="w-[60px] h-[60px] rounded-md"
+													src={
+														selectedProduct?.image?.url ||
+														selectedProduct?.image
+													}
+													alt={selectedProduct?.name}
+												/>
+												<p className=" text-center">{selectedProduct?.name}</p>
+											</div>
 										</div>
 										<button
-											className="bg-red-400 hover:bg-red-600 text-white h-10 w-full flex items-center justify-center rounded-md"
+											className="bg-red-500 hover:bg-red-400 text-white font-semibold h-10 py-1 w-full flex items-center justify-center rounded-md transition-all duration-500 ease-in-out"
 											onClick={() =>
 												handleDeleteProductCategory(selectedProduct)
 											}
 										>
 											<span>Delete Product</span>
-											<i className="fa-solid fa-paper-plane text-2xl text-primary"></i>
+											<i className="fa-solid fa-delete text-2xl text-primary"></i>
 										</button>
 									</div>
 								</Dialog.Panel>

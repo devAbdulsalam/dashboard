@@ -1,27 +1,86 @@
 // import React from 'react'
 import { useQuery } from '@tanstack/react-query';
-import { fetchProduct } from '../hooks/axiosApis';
+import { fetchOrder } from '../hooks/axiosApis';
 import { useState, useContext, useEffect } from 'react';
 import AuthContext from '../context/authContext';
 import toast from 'react-hot-toast';
 import Loader from '../components/Loader';
+import axios from 'axios';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 const OrderDetails = () => {
 	const { user } = useContext(AuthContext);
-	// const navigate = useNavigate();
-	const [search, setSearch] = useState();
-	const { data, isLoading, error } = useQuery(['products'], async () =>
-		fetchProduct(user)
+	const [order, setOrder] = useState('');
+	const [status, setStatus] = useState('');
+	const { id } = useParams();
+	const navigate = useNavigate();
+	const queryClient = useQueryClient();
+	// useEffect(() => {
+	// 	if (!user) {
+	// 		navigate('/order');
+	// 		setSelectedProduct('');
+	// 	}
+	// 	if (!selectedProduct) {
+	// 		console.log('no product selected');
+	// 		// navigate('/transactions');
+	// 	}
+	// console.log(user);
+	// }, [selectedProduct, user, navigate]);
+	const info = { token: user.token, id };
+	const { data, isLoading, error } = useQuery(['order', id], async () =>
+		fetchOrder(info)
 	);
 	useEffect(() => {
-		if (data) {
+		if (data && data.length > 0) {
+			setOrder(data);
 			console.log(data);
-			// navigate('/');/
 		}
 		if (error) {
 			console.log(error);
+			// navigate('/order');
 			toast.error(error?.message);
 		}
-	}, [data, error]);
+	}, [data, error, navigate]);
+	const config = {
+		headers: {
+			Authorization: `Bearer ${user?.token}`,
+			'Content-Type': 'multipart/form-data',
+		},
+	};
+	const apiUrl = import.meta.env.VITE_API_URL;
+	// const navigate = useNavigate();
+	const [loading, setLoading] = useState(false);
+	const handleUpdateOrder = async () => {
+		const data = {
+			status,
+		};
+
+		// if (!order) {
+		// 	return toast.error('product name is required');
+		// }
+		setLoading(true);
+		try {
+			axios
+				.patch(`${apiUrl}/orders/${id}`, data, config)
+				.then((res) => {
+					if (res.data) {
+						toast.success('Order updated successfully');
+					}
+					console.log(res);
+					queryClient.invalidateQueries(['orders', 'order']);
+				})
+				.catch((error) => {
+					toast.error(error.message);
+					console.log(error);
+				})
+				.finally(() => {
+					setLoading(false);
+				});
+		} catch (error) {
+			setLoading(false);
+			console.log(error);
+		}
+	};
 	return (
 		<>
 			<div className="body-content px-8 py-8 bg-slate-100">
@@ -30,16 +89,16 @@ const OrderDetails = () => {
 						<h3 className="mb-0 text-[28px]">Order Details</h3>
 						<ul className="text-tiny font-medium flex items-center space-x-3 text-text3">
 							<li className="breadcrumb-item text-muted">
-								<a href="product-list.html" className="text-hover-primary">
+								<Link to={'./product-list.html'} className="text-hover-primary">
 									{' '}
 									Home
-								</a>
+								</Link>
 							</li>
 							<li className="breadcrumb-item flex items-center">
 								<span className="inline-block bg-text3/60 w-[4px] h-[4px] rounded-full"></span>
 							</li>
 							<li className="breadcrumb-item text-muted">
-								Order Details #19893507
+								Order Details #{order._id}
 							</li>
 						</ul>
 					</div>
@@ -49,8 +108,9 @@ const OrderDetails = () => {
 				<div className="">
 					<div className="flex items-center flex-wrap justify-between px-8 mb-6 bg-white rounded-t-md rounded-b-md shadow-xs py-6">
 						<div className="relative">
-							<h5 className="font-normal mb-0">Oder ID : #26BC663E</h5>
+							<h5 className="font-normal mb-0">Oder ID : #{order._id}</h5>
 							<p className="mb-0 text-tiny">
+								{order._id}
 								Order Created : Jan 26, 2023 10:30 AM
 							</p>
 						</div>
@@ -59,17 +119,20 @@ const OrderDetails = () => {
 								<span className="text-tiny inline-block leading-none -translate-y-[2px]">
 									Change Status :{' '}
 								</span>
-								<select>
-									<option>Delivered</option>
-									<option>Pending</option>
-									<option>Refunded</option>
-									<option>Denied</option>
+								<select
+									value={status}
+									onChange={(e) => setStatus(e.target.value)}
+								>
+									<option value={'deliverd'}>Delivered</option>
+									<option value={'pending'}>Pending</option>
+									<option value={'refund'}>Refunded</option>
+									<option value={'denied'}>Denied</option>
 								</select>
 							</div>
 							<div className="product-add-btn flex ">
-								<a href="#" className="tp-btn ">
+								<button onClick={handleUpdateOrder} className="tp-btn ">
 									Save
-								</a>
+								</button>
 							</div>
 						</div>
 					</div>
@@ -217,7 +280,7 @@ const OrderDetails = () => {
 													scope="col"
 													className="px-3 py-3 text-tiny text-text2 uppercase font-semibold w-[170px] text-end"
 												>
-													Total
+													Totally
 												</th>
 											</tr>
 										</thead>
@@ -231,7 +294,7 @@ const OrderDetails = () => {
 															alt=""
 														/>
 														<span className="font-medium text-heading text-hover-primary transition">
-															Whitetails Women's Open Sky
+															Whitetails Open Sky
 														</span>
 													</a>
 												</td>
@@ -334,8 +397,8 @@ const OrderDetails = () => {
 					</div>
 				</div>
 			</div>
-			{isLoading && <Loader />}
+			{isLoading || loading ? <Loader /> : ''}
 		</>
 	);
 };
-export default OrderDetails
+export default OrderDetails;

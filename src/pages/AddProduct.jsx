@@ -1,11 +1,15 @@
-import { useState, useRef, useContext } from 'react';
+import { useState, useRef, useContext, useEffect } from 'react';
 import AuthContext from '../context/authContext';
 import toast from 'react-hot-toast';
 import Loader from '../components/Loader';
 import RadioInput from '../components/RadioInput';
 import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
+import { fetchProductCategoryAndSubCategory } from '../hooks/axiosApis';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import Tags from '../components/Tags';
+import CategorySelector from '../components/CategorySelector';
 const AddProduct = () => {
 	const { user } = useContext(AuthContext);
 	const token = user?.token;
@@ -26,14 +30,27 @@ const AddProduct = () => {
 	const [discount, setDiscount] = useState('');
 	const [color, setColor] = useState('');
 	const [size, setsize] = useState('');
-	const [tag, setTag] = useState('');
-	const [subCategory, setSubCategory] = useState('');
+	const [tag, setTag] = useState([]);
+	const [categories, setCategories] = useState([]);
 	const [category, setCategory] = useState('');
+	const [subCategory, setSubCategory] = useState('');
 	const [image, setImage] = useState(null);
 	const [imageName, setImageName] = useState(null);
 	const [imageFile, setImageFile] = useState(null);
 	const hiddenFileInput = useRef(null);
 	const [isLoading, setIsLoading] = useState(null);
+	const { data, error } = useQuery(['product-category'], async () =>
+		fetchProductCategoryAndSubCategory(user)
+	);
+	useEffect(() => {
+		if (data && data.length > 0) {
+			setCategories(data);
+			console.log(data);
+		}
+		if (error) {
+			console.log(error);
+		}
+	}, [data, error]);
 	const queryClient = useQueryClient();
 	const navigate = useNavigate();
 	const config = {
@@ -68,6 +85,7 @@ const AddProduct = () => {
 		};
 
 		if (name === '') {
+			console.log(data);
 			return toast.error('product name is required');
 		}
 		if (description === '') {
@@ -532,42 +550,17 @@ const AddProduct = () => {
 												Product Details
 											</p>
 											<div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
-												<div className="category-select select-bordered">
-													<h5 className="text-tiny mb-1">Category</h5>
-													<select
-														value={category}
-														onChange={(e) => setCategory(e.target.value)}
-													>
-														<option value="Electronics">Electronics</option>
-														<option value="Fashion">Fashion</option>
-														<option value="Jewellery">Jewellery</option>
-														<option value="Beauty">Beauty</option>
-														<option value="Grocery">Grocery</option>
-													</select>
-												</div>
-												<div className="sub-category-select select-bordered">
-													<h5 className="text-tiny mb-1">Sub Category</h5>
-													<select
-														value={subCategory}
-														onChange={(e) => setSubCategory(e.target.value)}
-													>
-														<option value="Electronics">Electronics</option>
-														<option value="Fashion">Fashion</option>
-														<option value="Jewellery">Jewellery</option>
-														<option value="Beauty">Beauty</option>
-														<option value="Grocery">Grocery</option>
-													</select>
-												</div>
+												<CategorySelector
+													categories={categories}
+													selectedCategory={category}
+													setSelectedCategory={setCategory}
+													selectedSubcategory={subCategory}
+													setSelectedSubcategory={setSubCategory}
+												/>
 											</div>
 											<div className="mb-5">
 												<p className="mb-0 text-base text-black">Tags</p>
-												<input
-													type="text"
-													id="tag-input1"
-													className="hidden"
-													value={tag}
-													onChange={(e) => setTag(e.target.value)}
-												/>
+												<Tags tags={tag} setTags={setTag} />
 											</div>
 										</div>
 										<div className="bg-white px-8 py-8 rounded-md">

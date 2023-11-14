@@ -15,11 +15,13 @@ const Order = () => {
 	const apiUrl = import.meta.env.VITE_API_URL;
 	// const navigate = useNavigate();
 	const [search, setSearch] = useState();
+	const [orders, setOrders] = useState('');
 	const { data, isLoading, error } = useQuery(['orders'], async () =>
 		fetchOrders(user)
 	);
 	useEffect(() => {
-		if (data) {
+		if (data && data.length > 0) {
+			setOrders(data);
 			console.log(data);
 			// navigate('/');/
 		}
@@ -251,8 +253,8 @@ const Order = () => {
 								</tr>
 							</thead>
 							<tbody>
-								{data?.length > 0 &&
-									data?.map((order) => (
+								{orders?.length > 0 &&
+									orders?.map((order) => (
 										<tr
 											key={order._id}
 											className="bg-white border-b border-gray6 last:border-0 text-start mx-9"
@@ -387,8 +389,8 @@ const Order = () => {
 					<div className="flex justify-between items-center flex-wrap mx-8">
 						<p className="mb-0 text-tiny">Showing 10 Prdouct of 120</p>
 						<div className="pagination py-3 flex justify-end items-center  mx-8">
-							<a
-								href="#"
+							<Link
+								to={'./iojnsdoniedn#'}
 								className="inline-block rounded-md w-10 h-10 text-center leading-[33px] border border-gray mr-2 last:mr-0 hover:bg-theme hover:text-white hover:border-theme"
 							>
 								<svg
@@ -404,7 +406,7 @@ const Order = () => {
 										fill="currentColor"
 									/>
 								</svg>
-							</a>
+							</Link>
 							<a
 								href="#"
 								className="inline-block rounded-md w-10 h-10 text-center leading-[33px] border border-gray mr-2 last:mr-0 hover:bg-theme hover:text-white hover:border-theme"

@@ -13,7 +13,7 @@ import SiteSetting from './pages/SiteSetting';
 import Category from './pages/Category';
 import Coupon from './pages/Coupon';
 import Order from './pages/Order';
-import OrderDetails from './pages/Order';
+import OrderDetails from './pages/OrderDetails';
 import Profile from './pages/Profile';
 import Transactions from './pages/Transactions';
 import Transaction from './pages/Transaction';
@@ -38,13 +38,16 @@ function App() {
 							<Route path="/add-product" element={<AddProduct />}></Route>
 							<Route path="/products/:id" element={<EditProduct />}></Route>
 							<Route path="/category" element={<Category />}></Route>
+							<Route path="/category/:id" element={<Category />}></Route>
 							<Route path="/coupon" element={<Coupon />}></Route>
+							<Route path="/coupon/:id" element={<Coupon />}></Route>
 							<Route path="/profile" element={<Profile />}></Route>
 							<Route path="/orders" element={<Order />}></Route>
-							<Route path="/orders/id" element={<OrderDetails />}></Route>
+							<Route path="/orders/:id" element={<OrderDetails />}></Route>
 							<Route path="/customers" element={<CustomersList />}></Route>
+							<Route path="/customers/:id" element={<CustomersList />}></Route>
 							<Route path="/transactions" element={<Transactions />}></Route>
-							<Route path="/transactions/id" element={<Transaction />}></Route>
+							<Route path="/transactions/:id" element={<Transaction />}></Route>
 							<Route path="/site-settings" element={<SiteSetting />}></Route>
 							<Route path="/reviews" element={<Reviews />}></Route>
 						</Route>

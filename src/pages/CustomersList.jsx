@@ -8,6 +8,7 @@ import Loader from '../components/Loader';
 import axios from 'axios';
 import { useQueryClient } from '@tanstack/react-query';
 import { Dialog, Transition } from '@headlessui/react';
+import { Link } from 'react-router-dom';
 const CustomersList = () => {
 	const { user, selectedProduct, setSelectedProduct } = useContext(AuthContext);
 	const queryClient = useQueryClient();
@@ -93,10 +94,10 @@ const CustomersList = () => {
 						<h3 className="mb-0 text-[28px]">Customer</h3>
 						<ul className="text-tiny font-medium flex items-center space-x-3 text-text3">
 							<li className="breadcrumb-item text-muted">
-								<a href="/product-list" className="text-hover-primary">
+								<Link to={"/product-list"} className="text-hover-primary">
 									{' '}
 									Home
-								</a>
+								</Link>
 							</li>
 							<li className="breadcrumb-item flex items-center">
 								<span className="inline-block bg-text3/60 w-[4px] h-[4px] rounded-full"></span>
