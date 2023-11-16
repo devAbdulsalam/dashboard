@@ -7,7 +7,7 @@ import Loader from '../components/Loader';
 import axios from 'axios';
 import RadioInput from '../components/RadioInput';
 import { useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 const EditProduct = () => {
 	const { user, selectedProduct, setSelectedProduct } = useContext(AuthContext);
 	const apiUrl = import.meta.env.VITE_API_URL;
@@ -33,9 +33,7 @@ const EditProduct = () => {
 	const [discountType, setDiscountType] = useState(
 		selectedProduct?.discountType
 	);
-	const [discount, setDiscount] = useState(
-		selectedProduct?.discount
-	);
+	const [discount, setDiscount] = useState(selectedProduct?.discount);
 	const [color, setColor] = useState(selectedProduct?.color);
 	const [size, setsize] = useState(selectedProduct?.size);
 	const [tag, setTag] = useState(selectedProduct?.tag);
@@ -61,7 +59,8 @@ const EditProduct = () => {
 	const handleUpdateProduct = async () => {
 		const data = {
 			name,
-			description, price,
+			description,
+			price,
 			sku,
 			quantity,
 			vat,
@@ -164,10 +163,10 @@ const EditProduct = () => {
 								<h3 className="mb-0 text-[28px]">Edit Product</h3>
 								<ul className="text-tiny font-medium flex items-center space-x-3 text-text3">
 									<li className="breadcrumb-item text-muted">
-										<a href="product-list.html" className="text-hover-primary">
+										<Link to={'./'} className="text-hover-primary">
 											{' '}
 											Home
-										</a>
+										</Link>
 									</li>
 									<li className="breadcrumb-item flex items-center">
 										<span className="inline-block bg-text3/60 w-[4px] h-[4px] rounded-full"></span>

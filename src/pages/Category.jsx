@@ -9,7 +9,7 @@ import axios from 'axios';
 import { useQueryClient } from '@tanstack/react-query';
 import { Dialog, Transition } from '@headlessui/react';
 import SelectOptions from '../components/SelectOptions';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 const Category = () => {
 	const { user, selectedProduct, setSelectedProduct } = useContext(AuthContext);
 	const apiUrl = import.meta.env.VITE_API_URL;
@@ -40,7 +40,7 @@ const Category = () => {
 	const hiddenFileInput = useRef(null);
 	const [loading, setLoading] = useState(null);
 	const queryClient = useQueryClient();
-	// const navigate = useNavigate();
+	const navigate = useNavigate();
 	const config = {
 		headers: {
 			Authorization: `Bearer ${user?.token}`,
@@ -59,7 +59,6 @@ const Category = () => {
 		}
 		setParent(() => e.target.value);
 	};
-	// console.log(parentCategories);
 	const handleAddCategory = async () => {
 		if (name === '') {
 			return toast.error('category name is required');
@@ -169,6 +168,7 @@ const Category = () => {
 	};
 	const handleEdit = (category) => {
 		setSelectedProduct(category);
+		navigate(`/category/${category._id}/edit`);
 	};
 	const handleDelete = async (category) => {
 		console.log(category);
@@ -213,10 +213,10 @@ const Category = () => {
 								<h3 className="mb-0 text-[28px]">Category</h3>
 								<ul className="text-tiny font-medium flex items-center space-x-3 text-text3">
 									<li className="breadcrumb-item text-muted">
-										<a href="product-list.html" className="text-hover-primary">
+										<Link to={'/'} className="text-hover-primary">
 											{' '}
 											Home
-										</a>
+										</Link>
 									</li>
 									<li className="breadcrumb-item flex items-center">
 										<span className="inline-block bg-text3/60 w-[4px] h-[4px] rounded-full"></span>
@@ -300,14 +300,6 @@ const Category = () => {
 									selected={parent}
 									handleSelectOptionChange={handleSelectOptionChange}
 								/>
-								{/* <div className="category-add-select select-bordered">
-									<select value={parent} onChange={handleSelectOptionChange}>
-										<option value="Electronics">Electronics</option>
-										<option value="Fashion">Fashion</option>
-										<option value="Jewellery">Jewellery</option>
-										<option value="Grocery">Grocery</option>
-									</select> 
-								</div> */}
 							</div>
 							{/* <!-- input --> */}
 							<div className="mb-6">
@@ -337,6 +329,7 @@ const Category = () => {
 							</button>
 						</div>
 					</div>
+					{/* categories */}
 					<div className="col-span-12 lg:col-span-8">
 						<div className="relative overflow-x-auto bg-white px-8 py-4 rounded-md">
 							<div className="overflow-scroll 2xl:overflow-visible">
@@ -409,7 +402,7 @@ const Category = () => {
 														</td>
 														<td className="pr-8 py-5 whitespace-nowrap">
 															<Link
-																to={`category/${category._id}`}
+																to={`/category/${category._id}`}
 																className="flex items-center space-x-5"
 															>
 																<img
@@ -429,7 +422,7 @@ const Category = () => {
 															{category.slug}
 														</td>
 														<td className="px-3 py-3 font-normal text-[#55585B] text-end">
-															78
+															{category.items}
 														</td>
 														<td className="px-9 py-3 text-end">
 															<div className="flex items-center justify-end space-x-2">
@@ -514,7 +507,9 @@ const Category = () => {
 								</div>
 							</div>
 							<div className="flex justify-between items-center flex-wrap">
-								<p className="mb-0 text-tiny">Showing 10 Prdouct of {data?.length}</p>
+								<p className="mb-0 text-tiny">
+									Showing 10 Prdouct of {data?.length}
+								</p>
 								<div className="pagination py-3 flex justify-end items-center">
 									<a
 										href="#"

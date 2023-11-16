@@ -25,7 +25,7 @@ const fetchDashboard = async (user) => {
 		return error;
 	}
 };
-const fetchProduct = async (user) => {
+const fetchProducts = async (user) => {
 	try {
 		const config = {
 			headers: {
@@ -33,6 +33,20 @@ const fetchProduct = async (user) => {
 			},
 		};
 		const { data } = await axios.get(`${apiUrl}/products`, config);
+		return data;
+	} catch (error) {
+		console.log(error.message);
+		return error;
+	}
+};
+const fetchProduct = async (prop) => {
+	try {
+		const config = {
+			headers: {
+				Authorization: `Bearer ${prop?.token}`,
+			},
+		};
+		const { data } = await axios.get(`${apiUrl}/products/${prop.id}`, config);
 		return data;
 	} catch (error) {
 		console.log(error.message);
@@ -78,7 +92,7 @@ const fetchCoupons = async (user) => {
 				Authorization: `Bearer ${user?.token}`,
 			},
 		};
-		const { data } = await axios.get(`${apiUrl}/management/coupons`, config);
+		const { data } = await axios.get(`${apiUrl}/coupons`, config);
 		return data;
 	} catch (error) {
 		console.log(error.message);
@@ -94,23 +108,21 @@ const fetchCoupon = async (prop) => {
 				Authorization: `Bearer ${user?.token}`,
 			},
 		};
-		const { data } = await axios.get(`${apiUrl}/coupon/${couponId}`, config);
+		const { data } = await axios.get(`${apiUrl}/coupons/${couponId}`, config);
 		return data;
 	} catch (error) {
 		console.log(error.message);
 		return error;
 	}
 };
-const fetchCustomers = async (prop) => {
-	const { user } = prop;
-	console.log(prop.token);
+const fetchCustomers = async (user) => {
 	try {
 		const config = {
 			headers: {
 				Authorization: `Bearer ${user?.token}`,
 			},
 		};
-		const { data } = await axios.get(`${apiUrl}/users`, prop, config);
+		const { data } = await axios.get(`${apiUrl}/users`, config);
 		return data;
 	} catch (error) {
 		console.log(error.message);
@@ -141,6 +153,24 @@ const fetchProductCategory = async (prop) => {
 			},
 		};
 		const { data } = await axios.get(`${apiUrl}/products/category`, config);
+		return data;
+	} catch (error) {
+		console.log(error.message);
+		return error;
+	}
+};
+const fetchProductCategoryDetail = async (prop) => {
+	const { token, id } = prop;
+	try {
+		const config = {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		};
+		const { data } = await axios.get(
+			`${apiUrl}/products/category/${id}`,
+			config
+		);
 		return data;
 	} catch (error) {
 		console.log(error.message);
@@ -199,6 +229,7 @@ const fetchTransaction = async (prop) => {
 export {
 	fetchSite,
 	fetchDashboard,
+	fetchProducts,
 	fetchProduct,
 	fetchCoupons,
 	fetchCoupon,
@@ -207,6 +238,7 @@ export {
 	fetchCustomers,
 	fetchCustomer,
 	fetchProductCategory,
+	fetchProductCategoryDetail,
 	fetchProductCategoryAndSubCategory,
 	fetchTransactions,
 	fetchTransaction,

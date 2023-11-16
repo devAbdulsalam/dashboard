@@ -45,7 +45,7 @@ const AddProduct = () => {
 	useEffect(() => {
 		if (data && data.length > 0) {
 			setCategories(data);
-			console.log(data);
+			// console.log(data);
 		}
 		if (error) {
 			console.log(error);

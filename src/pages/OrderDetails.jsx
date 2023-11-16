@@ -6,32 +6,22 @@ import AuthContext from '../context/authContext';
 import toast from 'react-hot-toast';
 import Loader from '../components/Loader';
 import axios from 'axios';
+import formatDateString from '../hooks/formatDateString';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 const OrderDetails = () => {
 	const { user } = useContext(AuthContext);
 	const [order, setOrder] = useState('');
-	const [status, setStatus] = useState('');
+	const [orderStatus, setOrderStatus] = useState('');
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
-	// useEffect(() => {
-	// 	if (!user) {
-	// 		navigate('/order');
-	// 		setSelectedProduct('');
-	// 	}
-	// 	if (!selectedProduct) {
-	// 		console.log('no product selected');
-	// 		// navigate('/transactions');
-	// 	}
-	// console.log(user);
-	// }, [selectedProduct, user, navigate]);
 	const info = { token: user.token, id };
 	const { data, isLoading, error } = useQuery(['order', id], async () =>
 		fetchOrder(info)
 	);
 	useEffect(() => {
-		if (data && data.length > 0) {
+		if (data) {
 			setOrder(data);
 			console.log(data);
 		}
@@ -44,7 +34,7 @@ const OrderDetails = () => {
 	const config = {
 		headers: {
 			Authorization: `Bearer ${user?.token}`,
-			'Content-Type': 'multipart/form-data',
+			// 'Content-Type': 'multipart/form-data',
 		},
 	};
 	const apiUrl = import.meta.env.VITE_API_URL;
@@ -52,7 +42,7 @@ const OrderDetails = () => {
 	const [loading, setLoading] = useState(false);
 	const handleUpdateOrder = async () => {
 		const data = {
-			status,
+			status: orderStatus,
 		};
 
 		// if (!order) {
@@ -89,7 +79,7 @@ const OrderDetails = () => {
 						<h3 className="mb-0 text-[28px]">Order Details</h3>
 						<ul className="text-tiny font-medium flex items-center space-x-3 text-text3">
 							<li className="breadcrumb-item text-muted">
-								<Link to={'./product-list.html'} className="text-hover-primary">
+								<Link to={'/'} className="text-hover-primary">
 									{' '}
 									Home
 								</Link>
@@ -98,7 +88,8 @@ const OrderDetails = () => {
 								<span className="inline-block bg-text3/60 w-[4px] h-[4px] rounded-full"></span>
 							</li>
 							<li className="breadcrumb-item text-muted">
-								Order Details #{order._id}
+								<Link to={'/orders'}>Order</Link> Details #
+								{order?._id?.slice(-6)}
 							</li>
 						</ul>
 					</div>
@@ -108,10 +99,11 @@ const OrderDetails = () => {
 				<div className="">
 					<div className="flex items-center flex-wrap justify-between px-8 mb-6 bg-white rounded-t-md rounded-b-md shadow-xs py-6">
 						<div className="relative">
-							<h5 className="font-normal mb-0">Oder ID : #{order._id}</h5>
+							<h5 className="font-normal mb-0">
+								Oder ID : #{order?._id?.slice(-6)}
+							</h5>
 							<p className="mb-0 text-tiny">
-								{order._id}
-								Order Created : Jan 26, 2023 10:30 AM
+								Order Created : {formatDateString(order?.updatedAt)}
 							</p>
 						</div>
 						<div className="flex sm:justify-end flex-wrap sm:space-x-6 mt-5 md:mt-0">
@@ -120,8 +112,8 @@ const OrderDetails = () => {
 									Change Status :{' '}
 								</span>
 								<select
-									value={status}
-									onChange={(e) => setStatus(e.target.value)}
+									value={orderStatus}
+									onChange={(e) => setOrderStatus(e.target.value)}
 								>
 									<option value={'deliverd'}>Delivered</option>
 									<option value={'pending'}>Pending</option>
@@ -148,17 +140,22 @@ const OrderDetails = () => {
 												Name
 											</td>
 											<td className="py-3 whitespace-nowrap ">
-												<a
-													href="#"
+												<Link
+													to={`/customers/${order?.userId?._id}`}
 													className="flex items-center justify-end space-x-5 text-end text-heading text-hover-primary"
 												>
 													<img
 														className="w-10 h-10 rounded-full"
-														src="assets/img/users/user-10.jpg"
-														alt=""
+														src={
+															order?.userId?.image?.url ||
+															'assets/img/users/user-10.jpg'
+														}
+														alt={order?.firstName}
 													/>
-													<span className="font-medium ">Shahnewaz Sakil</span>
-												</a>
+													<span className="font-medium ">
+														{order?.firstName}
+													</span>
+												</Link>
 											</td>
 										</tr>
 										<tr className="bg-white border-b border-gray6 last:border-0 text-start mx-9">
@@ -166,7 +163,7 @@ const OrderDetails = () => {
 												Email
 											</td>
 											<td className="py-3 text-end">
-												<a href="mailto:support@mail.com">support@mail.com</a>
+												<a href="mailto:support@mail.com">{order?.email}</a>
 											</td>
 										</tr>
 										<tr className="bg-white border-b border-gray6 last:border-0 text-start mx-9">
@@ -174,7 +171,7 @@ const OrderDetails = () => {
 												Phone
 											</td>
 											<td className="py-3 text-end">
-												<a href="tel:9458785014">+9458 785 014</a>
+												<a href="tel:9458785014">{order?.phone}</a>
 											</td>
 										</tr>
 									</tbody>
@@ -192,7 +189,7 @@ const OrderDetails = () => {
 												Order Date
 											</td>
 											<td className="py-3 whitespace-nowrap text-end">
-												04/05/2023
+												{formatDateString(order?.createdAt)}
 											</td>
 										</tr>
 										<tr className="bg-white border-b border-gray6 last:border-0 text-start mx-9">
@@ -200,7 +197,7 @@ const OrderDetails = () => {
 												Payment Method
 											</td>
 											<td className="py-3 text-end">
-												Online{' '}
+												{order?.paymentMethod}{' '}
 												<img
 													className="w-[40px] h-auto"
 													src="assets/img/icons/visa.svg"
@@ -212,7 +209,7 @@ const OrderDetails = () => {
 											<td className="py-3 font-normal text-[#55585B] w-[50%]">
 												Shipping Method
 											</td>
-											<td className="py-3 text-end">Cash On Delivery</td>
+											<td className="py-3 text-end">{order?.shippingOption}</td>
 										</tr>
 									</tbody>
 								</table>
@@ -228,23 +225,23 @@ const OrderDetails = () => {
 											<td className="py-3 font-normal text-[#55585B] w-[40%]">
 												House
 											</td>
-											<td className="py-3 text-end">
-												7765 Spring Circle Chicago, IL 60621
-											</td>
+											<td className="py-3 text-end">{order?.address}</td>
 										</tr>
 										<tr className="bg-white border-b border-gray6 last:border-0 text-start mx-9">
 											<td className="py-3 font-normal text-[#55585B] w-[40%]">
 												Street
 											</td>
 											<td className="py-3 whitespace-nowrap text-end">
-												3169 Hamilton Drive
+												{order?.zipCode}
 											</td>
 										</tr>
 										<tr className="bg-white border-b border-gray6 last:border-0 text-start mx-9">
 											<td className="py-3 font-normal text-[#55585B] w-[40%]">
 												State
 											</td>
-											<td className="py-3 text-end">Texas</td>
+											<td className="py-3 text-end">
+												{order?.city}, {order?.country}
+											</td>
 										</tr>
 									</tbody>
 								</table>
@@ -285,75 +282,37 @@ const OrderDetails = () => {
 											</tr>
 										</thead>
 										<tbody>
-											<tr className="bg-white border-b border-gray6 last:border-0 text-start mx-9">
-												<td className="pr-8 py-5 whitespace-nowrap">
-													<a href="#" className="flex items-center space-x-5">
-														<img
-															className="w-[40px] h-[40px] rounded-md"
-															src="assets/img/product/prodcut-1.jpg"
-															alt=""
-														/>
-														<span className="font-medium text-heading text-hover-primary transition">
-															Whitetails Open Sky
-														</span>
-													</a>
-												</td>
-												<td className="px-3 py-3 font-normal text-[#55585B] text-end">
-													$171.00
-												</td>
-												<td className="px-3 py-3 font-normal text-[#55585B] text-end">
-													37
-												</td>
-												<td className="px-3 py-3 font-normal text-[#55585B] text-end">
-													$1200.33
-												</td>
-											</tr>
-											<tr className="bg-white border-b border-gray6 last:border-0 text-start mx-9">
-												<td className="pr-8 py-5 whitespace-nowrap">
-													<a href="#" className="flex items-center space-x-5">
-														<img
-															className="w-[40px] h-[40px] rounded-md"
-															src="assets/img/product/prodcut-2.jpg"
-															alt=""
-														/>
-														<span className="font-medium text-heading text-hover-primary transition">
-															Red Bag for kids
-														</span>
-													</a>
-												</td>
-												<td className="px-3 py-3 font-normal text-[#55585B] text-end">
-													$15.00
-												</td>
-												<td className="px-3 py-3 font-normal text-[#55585B] text-end">
-													10
-												</td>
-												<td className="px-3 py-3 font-normal text-[#55585B] text-end">
-													$15.00
-												</td>
-											</tr>
-											<tr className="bg-white border-b border-gray6 last:border-0 text-start mx-9">
-												<td className="pr-8 py-5 whitespace-nowrap">
-													<a href="#" className="flex items-center space-x-5">
-														<img
-															className="w-[40px] h-[40px] rounded-md"
-															src="assets/img/product/prodcut-3.jpg"
-															alt=""
-														/>
-														<span className="font-medium text-heading text-hover-primary transition">
-															Sports shoe for women
-														</span>
-													</a>
-												</td>
-												<td className="px-3 py-3 font-normal text-[#55585B] text-end">
-													$145.00
-												</td>
-												<td className="px-3 py-3 font-normal text-[#55585B] text-end">
-													20
-												</td>
-												<td className="px-3 py-3 font-normal text-[#55585B] text-end">
-													$2500.00
-												</td>
-											</tr>
+											{order?.cart?.map((item) => (
+												<tr
+													key={item._id}
+													className="bg-white border-b border-gray6 last:border-0 text-start mx-9"
+												>
+													<td className="pr-8 py-5 whitespace-nowrap">
+														<a href="#" className="flex items-center space-x-5">
+															<img
+																className="w-[40px] h-[40px] rounded-md"
+																src={
+																	item.image.url ||
+																	'assets/img/product/prodcut-1.jpg'
+																}
+																alt={item.name}
+															/>
+															<span className="font-medium text-heading text-hover-primary transition">
+																{item.name}
+															</span>
+														</a>
+													</td>
+													<td className="px-3 py-3 font-normal text-[#55585B] text-end">
+														${item?.price}
+													</td>
+													<td className="px-3 py-3 font-normal text-[#55585B] text-end">
+														{item?.cartQuantity}
+													</td>
+													<td className="px-3 py-3 font-normal text-[#55585B] text-end">
+														${Number(item?.price) * Number(item?.cartQuantity)}
+													</td>
+												</tr>
+											))}
 										</tbody>
 									</table>
 								</div>
@@ -370,7 +329,7 @@ const OrderDetails = () => {
 													Subtotal
 												</td>
 												<td className="px-3 py-3 pt-6 font-normal text-[#55585B] text-end">
-													$1237.00
+													${order?.cartTotalAmount}
 												</td>
 											</tr>
 											<tr className="bg-white border-b border-gray6 last:border-0 text-start mx-9">
@@ -378,7 +337,7 @@ const OrderDetails = () => {
 													Shipping cost:
 												</td>
 												<td className="px-3 py-3 font-normal text-[#55585B] text-end">
-													$49.55
+													${order?.shippingPrice}
 												</td>
 											</tr>
 											<tr className="bg-white border-b border-gray6 last:border-0 text-start mx-9">
@@ -386,7 +345,7 @@ const OrderDetails = () => {
 													Grand total:
 												</td>
 												<td className="px-3 py-3 text-[#55585B] text-end text-lg font-semibold">
-													$1310.55
+													${order?.totalPrice}
 												</td>
 											</tr>
 										</tbody>

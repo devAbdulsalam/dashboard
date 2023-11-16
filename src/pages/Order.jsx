@@ -124,7 +124,7 @@ const Order = () => {
 						<h3 className="mb-0 text-[28px]">Products</h3>
 						<ul className="text-tiny font-medium flex items-center space-x-3 text-text3">
 							<li className="breadcrumb-item text-muted">
-								<Link to={'../product-list'} className="text-hover-primary">
+								<Link to={'./'} className="text-hover-primary">
 									Home
 								</Link>
 							</li>
@@ -281,7 +281,7 @@ const Order = () => {
 												</Link>
 											</td>
 											<td className="px-3 py-3 font-normal text-[#55585B] text-end">
-												#479063DR
+												#{order._id.slice(-6)}
 											</td>
 											<td className="px-3 py-3 font-normal text-[#55585B] text-end">
 												{order?.cart?.length}
