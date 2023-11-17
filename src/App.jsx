@@ -27,8 +27,6 @@ import EditCategory from './pages/EditCategory';
 import CategoryDetails from './pages/CategoryDetails';
 import EditCoupon from './pages/EditCoupon';
 import CouponDetails from './pages/CouponDetails';
-import Monnify from './pages/Monnify';
-
 function App() {
 	return (
 		<Router>
@@ -61,7 +59,6 @@ function App() {
 						<Route path="/transactions/:id" element={<Transaction />}></Route>
 						<Route path="/site-settings" element={<SiteSetting />}></Route>
 						<Route path="/reviews" element={<Reviews />}></Route>
-						<Route path="/monnify" element={<Monnify />}></Route>
 					</Route>
 				</Route>
 				<Route path="*" element={<NotFound />} />

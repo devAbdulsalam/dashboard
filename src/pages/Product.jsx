@@ -349,7 +349,7 @@ const Product = () => {
 						<p className="mb-0 text-tiny">Showing 10 Prdouct of 120</p>
 						<div className="pagination py-3 flex justify-end items-center  mx-8">
 							<Link
-								to={`/monnify`}
+								to={`./`}
 								className="inline-block rounded-md w-10 h-10 text-center leading-[33px] border border-gray mr-2 last:mr-0 hover:bg-theme hover:text-white hover:border-theme"
 							>
 								<svg
