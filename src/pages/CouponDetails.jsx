@@ -1,29 +1,29 @@
 // import React from 'react'
 import { useQuery } from '@tanstack/react-query';
-import { fetchProductCategoryDetail } from '../hooks/axiosApis';
+import { fetchCoupon } from '../hooks/axiosApis';
 import { useState, useContext, useEffect } from 'react';
 import AuthContext from '../context/authContext';
 import toast from 'react-hot-toast';
 import Loader from '../components/Loader';
 // import axios from 'axios';
-// import formatDateString from '../hooks/formatDateString';
+import formatDateString from '../hooks/formatDateString';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 // import { useQueryClient } from '@tanstack/react-query';
 
-const CategoryDetails = () => {
+const CouponDetails = () => {
 	const { user, setSelectedProduct } = useContext(AuthContext);
-	const [category, setCategory] = useState('');
+	const [coupon, setCoupon] = useState('');
 	const { id } = useParams();
 	const navigate = useNavigate();
 	// const queryClient = useQueryClient();
 	const info = { token: user.token, id };
-	const { data, isLoading, error } = useQuery(['category', id], async () =>
-		fetchProductCategoryDetail(info)
+	const { data, isLoading, error } = useQuery(['coupon', id], async () =>
+		fetchCoupon(info)
 	);
 	useEffect(() => {
 		if (data) {
-			setCategory(data);
-			console.log(data);
+			setCoupon(data);
+			// console.log(data);
 		}
 		if (error) {
 			console.log(error);
@@ -31,9 +31,9 @@ const CategoryDetails = () => {
 			toast.error(error?.message);
 		}
 	}, [data, error, navigate]);
-	const handleEdit = (category) => {
-		setSelectedProduct(category);
-		navigate(`/category/${category?._id}/edit`);
+	const handleEdit = (coupon) => {
+		setSelectedProduct(coupon);
+		navigate(`/coupons/${coupon?._id}/edit`);
 	};
 
 	return (
@@ -42,7 +42,7 @@ const CategoryDetails = () => {
 				<div className=" w-full">
 					<div className="flex justify-between mb-10 items-end">
 						<div className="page-title">
-							<h3 className="mb-0 text-[28px]">Category Details</h3>
+							<h3 className="mb-0 text-[28px]">Coupon Details</h3>
 							<ul className="text-tiny font-medium flex items-center space-x-3 text-text3">
 								<li className="breadcrumb-item text-muted">
 									<Link to={'/'} className="text-hover-primary">
@@ -54,51 +54,40 @@ const CategoryDetails = () => {
 									<span className="inline-block bg-text3/60 w-[4px] h-[4px] rounded-full"></span>
 								</li>
 								<li className="breadcrumb-item text-muted">
-									<Link to={'/category'}>Category</Link> List
+									<Link to={'/coupon'}>Coupon</Link>
 								</li>
 							</ul>
 						</div>
 						<button
-							onClick={() => handleEdit(category)}
+							onClick={() => handleEdit(coupon)}
 							className="tp-btn px-10 py-2 mb-2"
 						>
 							Edit
 						</button>
 					</div>
 				</div>
-				<div className="category-details-container">
-					<div className="category-details">
-						<img src={category?.image?.url} alt={category?.name} />
-						<h2>{category?.name}</h2>
-						{!category?.isParent && (
-							<p>
-								Parent Category:
-								<Link to={`/category/${category?.parent?._id}`}>
-									{category?.parent?.name}
-								</Link>
-							</p>
-						)}
-						<p>Slug: {category?.slug}</p>
-						<p>Products: {category?.items}</p>
-						<p>Description: {category?.description}</p>
-					</div>
-					{category?.subcategories && (
-						<div>
-							<h4>Sub Categories:</h4>
-							<ul>
-								{category?.subcategories?.map((subcategory) => (
-									<li key={subcategory._id}>
-										<Link
-											to={`/category/${subcategory._id}`}
-											className="capitalize"
-										>
-											{subcategory?.name}
-										</Link>
-									</li>
-								))}
-							</ul>
-						</div>
-					)}
+				<div>
+					<p>Name: {coupon?.name}</p>
+					<p>Amount: {coupon?.amount}</p>
+					<p>Start Time: {formatDateString(coupon?.startTime)}</p>
+					<p>End Time: {formatDateString(coupon?.endTime)}</p>
+					<p>Code: {coupon?.code}</p>
+					<p>
+						Status:{' '}
+						<span
+							className={`${
+								coupon.status === 'Scheduled'
+									? 'text-yellow-500'
+									: coupon.status === 'Active'
+									? 'text-green-500'
+									: 'text-red-500'
+							} `}
+						>
+							{coupon?.status}
+						</span>
+					</p>
+					<p>Code: {coupon?.code}</p>
+					<p>Description: {coupon?.description}</p>
 				</div>
 			</div>
 			{isLoading ? <Loader /> : ''}
@@ -106,4 +95,4 @@ const CategoryDetails = () => {
 	);
 };
 
-export default CategoryDetails;
+export default CouponDetails;

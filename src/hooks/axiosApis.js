@@ -100,15 +100,15 @@ const fetchCoupons = async (user) => {
 	}
 };
 const fetchCoupon = async (prop) => {
-	const { user, couponId } = prop;
+	const { token, id } = prop;
 	// console.log(prop);
 	try {
 		const config = {
 			headers: {
-				Authorization: `Bearer ${user?.token}`,
+				Authorization: `Bearer ${token}`,
 			},
 		};
-		const { data } = await axios.get(`${apiUrl}/coupons/${couponId}`, config);
+		const { data } = await axios.get(`${apiUrl}/coupons/${id}`, config);
 		return data;
 	} catch (error) {
 		console.log(error.message);

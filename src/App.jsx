@@ -12,6 +12,7 @@ import ForgetPassword from './pages/ForgetPassword';
 import SiteSetting from './pages/SiteSetting';
 import Category from './pages/Category';
 import Coupon from './pages/Coupon';
+import AddCoupon from './pages/AddCoupon';
 import Order from './pages/Order';
 import OrderDetails from './pages/OrderDetails';
 import Profile from './pages/Profile';
@@ -25,6 +26,8 @@ import ProductDetails from './pages/ProductDetails';
 import EditCategory from './pages/EditCategory';
 import CategoryDetails from './pages/CategoryDetails';
 import EditCoupon from './pages/EditCoupon';
+import CouponDetails from './pages/CouponDetails';
+import Monnify from './pages/Monnify';
 
 function App() {
 	return (
@@ -45,9 +48,10 @@ function App() {
 						<Route path="/category" element={<Category />}></Route>
 						<Route path="/category/:id" element={<CategoryDetails />}></Route>
 						<Route path="/category/:id/edit" element={<EditCategory />}></Route>
-						<Route path="/coupon" element={<Coupon />}></Route>
-						<Route path="/coupon/:id" element={<EditCoupon />}></Route>
-						<Route path="/coupon/:id/edit" element={<EditCoupon />}></Route>
+						<Route path="/add-coupon" element={<AddCoupon />}></Route>
+						<Route path="/coupons" element={<Coupon />}></Route>
+						<Route path="/coupons/:id" element={<CouponDetails />}></Route>
+						<Route path="/coupons/:id/edit" element={<EditCoupon />}></Route>
 						<Route path="/profile" element={<Profile />}></Route>
 						<Route path="/orders" element={<Order />}></Route>
 						<Route path="/orders/:id" element={<OrderDetails />}></Route>
@@ -57,6 +61,7 @@ function App() {
 						<Route path="/transactions/:id" element={<Transaction />}></Route>
 						<Route path="/site-settings" element={<SiteSetting />}></Route>
 						<Route path="/reviews" element={<Reviews />}></Route>
+						<Route path="/monnify" element={<Monnify />}></Route>
 					</Route>
 				</Route>
 				<Route path="*" element={<NotFound />} />
