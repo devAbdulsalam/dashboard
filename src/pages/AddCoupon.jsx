@@ -22,7 +22,7 @@ const AddCoupon = () => {
 	useEffect(() => {
 		if (data) {
 			console.log(data);
-			// navigate('/');/
+			// navigate('/');
 		}
 		if (error) {
 			console.log(error);
