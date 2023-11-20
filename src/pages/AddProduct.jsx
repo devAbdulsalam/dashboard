@@ -10,6 +10,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import Tags from '../components/Tags';
 import CategorySelector from '../components/CategorySelector';
+import imageIcon from './../../assets/img/icons/upload.png';
 const AddProduct = () => {
 	const { user } = useContext(AuthContext);
 	const token = user?.token;
@@ -511,7 +512,7 @@ const AddProduct = () => {
 												{!image ? (
 													<img
 														className="w-[100px] h-auto mx-auto"
-														src="assets/img/icons/upload.png"
+														src={imageIcon}
 														alt="product"
 													/>
 												) : (

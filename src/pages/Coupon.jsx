@@ -23,7 +23,7 @@ const Coupon = () => {
 	useEffect(() => {
 		if (data && data?.length > 0) {
 			setCoupons(data);
-			// console.log(data);
+			console.log(data);
 			// navigate('/');/
 		}
 		if (error) {
@@ -230,9 +230,9 @@ const Coupon = () => {
 										</tr>
 									</thead>
 									<tbody>
-										{coupons?.map((coupon) => (
+										{coupons?.map((coupon, index) => (
 											<tr
-												key={coupon._id}
+												key={coupon._id || index}
 												className="bg-white border-b border-gray6 last:border-0 text-start mx-9"
 											>
 												<td className="pr-3  whitespace-nowrap">

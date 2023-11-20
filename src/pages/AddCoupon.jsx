@@ -10,6 +10,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import MultiSelectDropdown from './../components/MultiSelectDropdown';
 import { generateRandomCode } from '../hooks/RandomCode';
+import imageIcon from './../../assets/img/icons/upload.png';
+
 const AddCoupon = () => {
 	const { user } = useContext(AuthContext);
 	// const navigate = useNavigate();
@@ -98,11 +100,11 @@ const AddCoupon = () => {
 		if (endTime <= startTime) {
 			toast.error('End Time must be greater than Start Time');
 		}
-		// check if the catecory is already exist
+		// //check if the catecory is already exist
 		const couponAlreadyExist = data.find(
 			(item) => item.name.toLowerCase() === name.toLowerCase()
 		);
-		// also check if the user is already selected to avoid dublicate
+		// // also check if the user is already selected to avoid dublicate
 		if (couponAlreadyExist || data.includes(name.toLowerCase())) {
 			toast.error('Coupon already added');
 			return;
@@ -208,7 +210,7 @@ const AddCoupon = () => {
 								{!image ? (
 									<img
 										className="w-[100px] h-auto mx-auto"
-										src="assets/img/icons/upload.png"
+										src={imageIcon}
 										alt="coupon"
 									/>
 								) : (

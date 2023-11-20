@@ -5,6 +5,7 @@ import Loader from '../components/Loader';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { LocalStorage } from '../hooks/LocalStorage';
+import logo from './../../assets/img/bg/login-bg.jpg';
 const Login = () => {
 	const { user, setUser } = useContext(AuthContext);
 	const apiUrl = import.meta.env.VITE_API_URL;
@@ -57,9 +58,9 @@ const Login = () => {
 			setIsLoading(false);
 		}
 	};
-	const backgroundImageUrl = 'url(assets/img/bg/login-bg.jpg)';
+	// const backgroundImageUrl = ;
 	const bgImage = {
-		backgroundImage: backgroundImageUrl,
+		backgroundImage: `url(${logo})`,
 	};
 	return (
 		<>

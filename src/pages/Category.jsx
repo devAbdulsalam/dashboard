@@ -10,6 +10,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Dialog, Transition } from '@headlessui/react';
 import SelectOptions from '../components/SelectOptions';
 import { Link, useNavigate } from 'react-router-dom';
+import imageIcon from './../../assets/img/icons/upload.png';
 const Category = () => {
 	const { user, selectedProduct, setSelectedProduct } = useContext(AuthContext);
 	const apiUrl = import.meta.env.VITE_API_URL;
@@ -106,6 +107,7 @@ const Category = () => {
 					setName('');
 					setDescription('');
 					setSlug('');
+					setLoading(false);
 				})
 				.catch((error) => {
 					toast.error(error.message);
@@ -238,7 +240,7 @@ const Category = () => {
 									{!image ? (
 										<img
 											className="w-[100px] h-auto mx-auto"
-											src="assets/img/icons/upload.png"
+											src={imageIcon}
 											alt="category"
 										/>
 									) : (

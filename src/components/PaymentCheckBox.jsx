@@ -4,6 +4,7 @@ const PaymentCheckbox = ({ payment, onChange }) => {
 		const updatedPayment = { ...payment, active: event.target.checked };
 		onChange(updatedPayment);
 	};
+	// console.log(payment);
 
 	return (
 		<div className="tp-checkbox flex items-center">

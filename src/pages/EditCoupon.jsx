@@ -7,6 +7,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import { generateRandomCode } from '../hooks/RandomCode';
 import MultiSelectDropdown from './../components/MultiSelectDropdown';
+import imageIcon from './../../assets/img/icons/upload.png';
 const EditCoupon = () => {
 	const { user, selectedProduct, setSelectedProduct } = useContext(AuthContext);
 	const apiUrl = import.meta.env.VITE_API_URL;
@@ -153,7 +154,7 @@ const EditCoupon = () => {
 								{!image ? (
 									<img
 										className="w-[100px] h-auto mx-auto"
-										src="assets/img/icons/upload.png"
+										src={imageIcon}
 										alt="coupon"
 									/>
 								) : (

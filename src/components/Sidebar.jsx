@@ -6,6 +6,7 @@ import { LocalStorage } from '../hooks/LocalStorage';
 import AuthContext from '../context/authContext';
 import { useQuery } from '@tanstack/react-query';
 import { fetchSite } from '../hooks/axiosApis';
+import logo from './../assets/img/logo/logo.svg';
 const Sidebar = ({ sideMenu, setSideMenu }) => {
 	const navigate = useNavigate();
 	const [nav, setNav] = useState(null);
@@ -72,11 +73,7 @@ const Sidebar = ({ sideMenu, setSideMenu }) => {
 				<div className="">
 					<div className="py-4 pb-8 px-8 border-b border-gray h-[78px] w-full flex justify-between debug items-center">
 						<NavLink to={'/'}>
-							<img
-								className="w-[140px]"
-								src="assets/img/logo/logo.svg"
-								alt=""
-							/>
+							<img className="w-[140px]" src={logo} alt="" />
 						</NavLink>
 						<button
 							type="button"
