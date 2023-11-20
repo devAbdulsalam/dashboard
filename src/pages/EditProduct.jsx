@@ -24,11 +24,11 @@ const EditProduct = () => {
 	const [price, setPrice] = useState(selectedProduct?.price);
 	const [sku, setSku] = useState(selectedProduct?.sku);
 	const [quantity, setQuantity] = useState(selectedProduct?.quantity);
-	const [vat, setVat] = useState(selectedProduct?.vat);
-	const [height, setHeight] = useState(selectedProduct?.height);
-	const [weight, setWeight] = useState(selectedProduct?.weight);
-	const [width, setWidth] = useState(selectedProduct?.width);
-	const [cost, setCost] = useState(selectedProduct?.shippingCost);
+	const [vat, setVat] = useState(selectedProduct?.vat || 0);
+	const [height, setHeight] = useState(selectedProduct?.height || 0);
+	const [weight, setWeight] = useState(selectedProduct?.weight || 0);
+	const [width, setWidth] = useState(selectedProduct?.width || 0);
+	const [cost, setCost] = useState(selectedProduct?.shippingCost || 0);
 	const discountOptions = ['no discount', 'fixed discount', 'percent discount'];
 	const [discountType, setDiscountType] = useState(
 		selectedProduct?.discountType

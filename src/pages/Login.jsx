@@ -27,17 +27,15 @@ const Login = () => {
 		try {
 			setIsLoading(true);
 			const data = { email, password };
-			console.log(data);
+			// console.log(data);
 			axios
 				.post(`${apiUrl}/management/login`, data)
 				.then((res) => {
 					if (res.data) {
 						toast.success('Logged in successfully');
 					}
-					setUser({ ...res.data.user, token: res.data.token });
-					LocalStorage.set('user', { ...res.data.user, token: res.data.token });
-					console.log(user);
-					// LocalStorage.set('token', user.token);
+					setUser({ ...res.data.user });
+					LocalStorage.set('user', { ...res.data.user });
 					if (rememberMe) {
 						LocalStorage.set('rememberMe', 'true');
 						LocalStorage.set('username', user);

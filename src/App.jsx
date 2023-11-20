@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import ProtectedRoutes from './hooks/ProtectedRoutes';
 // import Layout from './Layout';
 import DashboardLayout from './DashboardLayout';
@@ -29,7 +29,6 @@ import EditCoupon from './pages/EditCoupon';
 import CouponDetails from './pages/CouponDetails';
 function App() {
 	return (
-		<Router>
 			<Routes>
 				{/* <Route path="/" element={<Layout />}> */}
 				<Route path="/login" element={<Login />}></Route>
@@ -63,7 +62,6 @@ function App() {
 				</Route>
 				<Route path="*" element={<NotFound />} />
 			</Routes>
-		</Router>
 	);
 }
 

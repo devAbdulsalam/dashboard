@@ -6,10 +6,10 @@ import AuthContext from '../context/authContext';
 import toast from 'react-hot-toast';
 import Loader from '../components/Loader';
 import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { Dialog, Transition } from '@headlessui/react';
 import SelectOptions from '../components/SelectOptions';
-import { Link, useNavigate } from 'react-router-dom';
 import imageIcon from './../../assets/img/icons/upload.png';
 const Category = () => {
 	const { user, selectedProduct, setSelectedProduct } = useContext(AuthContext);
