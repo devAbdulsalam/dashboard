@@ -332,7 +332,7 @@ const Coupon = () => {
 																onMouseEnter={() =>
 																	handleMouseEnterDelete(coupon._id)
 																}
-																onMouseLeave={() => handleMouseLeaveDelete}
+																onMouseLeave={handleMouseLeaveDelete}
 																onClick={() => handleDelete(coupon)}
 															>
 																<svg

@@ -58,8 +58,10 @@ const Profile = () => {
 			for (const key in data) {
 				formData.append(key, data[key]);
 			}
-
-			formData.append('image', imageFile);
+			if (imageFile) {
+				// console.log(imageFile);
+				formData.append('image', imageFile);
+			}
 			// formData.append('coverImage', coverImageFile);
 			axios
 				.patch(`${apiUrl}/management/${user?._id}`, formData, {
@@ -292,7 +294,7 @@ const Profile = () => {
 					<div className="grid grid-cols-12 gap-6">
 						<div className="col-span-12 2xl:col-span-8">
 							<div className="py-10 px-10 bg-white rounded-md">
-								<h5 className="text-xl mb-6">Basic InhtmlFormation</h5>
+								<h5 className="text-xl mb-6">Basic Information</h5>
 
 								<div className="">
 									<div className="grid grid-cols-1 sm:grid-cols-2 gap-5">

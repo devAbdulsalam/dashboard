@@ -10,7 +10,7 @@ import {
 	updateAccessToken,
 } from '../hooks/auth';
 const apiUrl = import.meta.env.VITE_API_URL;
-const ACCESS_TOKEN_EXPIRES_TIME = 1000 * 60 * 5; // 5 min
+const ACCESS_TOKEN_EXPIRES_TIME = 1000 * 60 * 60 * 24; // 5 min
 
 export const AuthContextProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
@@ -40,7 +40,9 @@ export const AuthContextProvider = ({ children }) => {
 			const user = await LocalStorage.get('user');
 			setUser(user);
 		} else {
-			console.log('response error');
+			// const user = await LocalStorage.get('user');
+			// setUser(user);
+			console.log(response?.error);
 			clearUserData();
 			navigate('/login');
 			window.location.reload();

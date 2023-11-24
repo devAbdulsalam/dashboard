@@ -3,11 +3,12 @@ import AuthContext from '../context/authContext';
 import toast from 'react-hot-toast';
 import Loader from '../components/Loader';
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
-const ForgetPassword = () => {
+import { useNavigate, useParams, Link } from 'react-router-dom';
+const ResetPassword = () => {
 	const { user } = useContext(AuthContext);
 	const apiUrl = import.meta.env.VITE_API_URL;
-	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const [cPassword, setCPassword] = useState('');
 	const [isLoading, setIsLoading] = useState('');
 	const navigate = useNavigate();
 	useEffect(() => {
@@ -15,23 +16,34 @@ const ForgetPassword = () => {
 			navigate('/');
 		}
 	});
+	const { token } = useParams();
+	useEffect(() => {
+		if (!token) {
+			navigate('/');
+		}
+	});
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		if (email === '') {
-			return toast.error('Eamil is required!');
+		if (password !== cPassword) {
+			return toast.error('Passwords must be the same');
+		}
+		if (password == '' || cPassword == '') {
+			return toast.error('Enter password and confirm password');
 		}
 		try {
 			setIsLoading(true);
-			const data = { email };
+			const data = { password, token };
+			console.log(data);
 			axios
-				.post(`${apiUrl}/management/forget-password`, data)
+				.post(`${apiUrl}/management/password-reset`, data)
 				.then((res) => {
 					console.log(res);
 					if (res.data) {
-						toast.success(
-							`if an account exist for ${email}
-							 you  will recaive a password reset instruction`
-						);
+						toast.success('Password reset successfull');
+						setTimeout(() => {
+							toast.success('Login in to continue');
+							navigate('/login');
+						}, 500);
 					}
 				})
 				.catch((error) => {
@@ -53,26 +65,39 @@ const ForgetPassword = () => {
 					<div className="w-[500px] mx-auto my-auto shadow-lg bg-white pt-[50px] py-[60px] px-[60px]">
 						<div className="text-center">
 							<h4 className="text-[24px] mb-1">Reset Password</h4>
-							<p>Enter your email address to request password reset.</p>
+							<p>Enter new secured passwords to reset your password.</p>
 						</div>
 						<div className="">
 							<form onSubmit={handleSubmit}>
 								<div className="mb-5">
 									<p className="mb-0 text-base text-black">
-										Email <span className="text-red">*</span>
+										Password <span className="text-red">*</span>
 									</p>
 									<input
 										className="input w-full h-[49px] rounded-md border border-gray6 px-6 text-base"
-										type="email"
-										placeholder="Enter Your Email"
-										onChange={(e) => setEmail(e.target.value)}
+										type="password"
+										value={password}
+										placeholder="Enter new password"
+										onChange={(e) => setPassword(e.target.value)}
+									/>
+								</div>
+								<div className="mb-5">
+									<p className="mb-0 text-base text-black">
+										Confirm password <span className="text-red">*</span>
+									</p>
+									<input
+										className="input w-full h-[49px] rounded-md border border-gray6 px-6 text-base"
+										type="text"
+										value={cPassword}
+										placeholder="confrim password"
+										onChange={(e) => setCPassword(e.target.value)}
 									/>
 								</div>
 								<button
 									type="submit"
 									className="tp-btn h-[49px] w-full justify-center"
 								>
-									Send Mail
+									Reset Password
 								</button>
 
 								<div className="tp-checkbox flex items-start space-x-2 mt-5 justify-center">
@@ -96,4 +121,4 @@ const ForgetPassword = () => {
 	);
 };
 
-export default ForgetPassword;
+export default ResetPassword;

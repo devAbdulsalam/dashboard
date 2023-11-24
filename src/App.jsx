@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import ProtectedRoutes from './hooks/ProtectedRoutes';
-// import Layout from './Layout';
+import Layout from './Layout';
 import DashboardLayout from './DashboardLayout';
 import Login from './pages/Login';
 import Product from './pages/Product';
@@ -9,6 +9,7 @@ import AddProduct from './pages/AddProduct';
 import EditProduct from './pages/EditProduct';
 import Dashboard from './pages/Dashboard';
 import ForgetPassword from './pages/ForgetPassword';
+import ResetPassword from './pages/ResetPassword';
 import SiteSetting from './pages/SiteSetting';
 import Category from './pages/Category';
 import Coupon from './pages/Coupon';
@@ -29,11 +30,16 @@ import EditCoupon from './pages/EditCoupon';
 import CouponDetails from './pages/CouponDetails';
 function App() {
 	return (
-			<Routes>
-				{/* <Route path="/" element={<Layout />}> */}
+		<Routes>
+			<Route path="/" element={<Layout />}>
 				<Route path="/login" element={<Login />}></Route>
 				<Route path="/register" element={<Register />}></Route>
 				<Route path="/forgot" element={<ForgetPassword />}></Route>
+				<Route
+					exact
+					path="/reset-password/:token"
+					element={<ResetPassword />}
+				></Route>
 				<Route element={<ProtectedRoutes />}>
 					<Route exact path="/" element={<DashboardLayout />}>
 						<Route path="/" element={<Dashboard />}></Route>
@@ -61,7 +67,8 @@ function App() {
 					</Route>
 				</Route>
 				<Route path="*" element={<NotFound />} />
-			</Routes>
+			</Route>
+		</Routes>
 	);
 }
 

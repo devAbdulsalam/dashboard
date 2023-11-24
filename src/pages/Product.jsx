@@ -9,6 +9,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Dialog, Transition } from '@headlessui/react';
 import axios from 'axios';
 import Search from '../components/Search';
+import ProductTable from '../components/ProductTable';
+
 const Product = () => {
 	const { user, selectedProduct, setSelectedProduct } = useContext(AuthContext);
 	const navigate = useNavigate();
@@ -112,6 +114,7 @@ const Product = () => {
 
 				{/* <!-- table --> */}
 				<div className="bg-white rounded-t-md rounded-b-md shadow-xs py-4">
+					<ProductTable data={products} />
 					<div className="tp-search-box flex items-center justify-between px-8 py-8">
 						<Search />
 						<div className="flex justify-end space-x-6">
@@ -137,7 +140,7 @@ const Product = () => {
 					<div className="relative overflow-x-auto  mx-8">
 						<table className="w-full text-base text-left text-gray-500">
 							<thead className="bg-white">
-								<tr className="border-b border-gray6 text-tiny">
+								<tr className="border-b border-gray 6 text-tiny">
 									<th
 										scope="col"
 										className=" py-3 text-tiny text-text2 uppercase font-semibold w-[3%]"

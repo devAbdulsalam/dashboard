@@ -9,10 +9,11 @@ import axios from 'axios';
 import formatDateString from '../hooks/formatDateString';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
+import getOrderStatus from '../hooks/getOrderStatus';
 const OrderDetails = () => {
 	const { user } = useContext(AuthContext);
 	const [order, setOrder] = useState('');
-	const [orderStatus, setOrderStatus] = useState('');
+	const [orderStatus, setOrderStatus] = useState(order.isDelivered || '');
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
@@ -42,12 +43,8 @@ const OrderDetails = () => {
 	const [loading, setLoading] = useState(false);
 	const handleUpdateOrder = async () => {
 		const data = {
-			status: orderStatus,
+			isDelivered: orderStatus,
 		};
-
-		// if (!order) {
-		// 	return toast.error('product name is required');
-		// }
 		setLoading(true);
 		try {
 			axios
@@ -107,19 +104,26 @@ const OrderDetails = () => {
 							</p>
 						</div>
 						<div className="flex sm:justify-end flex-wrap sm:space-x-6 mt-5 md:mt-0">
-							<div className="search-select mr-3 flex items-center space-x-3 ">
-								<span className="text-tiny inline-block leading-none -translate-y-[2px]">
-									Change Status :{' '}
-								</span>
-								<select
-									value={orderStatus}
-									onChange={(e) => setOrderStatus(e.target.value)}
-								>
-									<option value={'deliverd'}>Delivered</option>
-									<option value={'pending'}>Pending</option>
-									<option value={'refund'}>Refunded</option>
-									<option value={'denied'}>Denied</option>
-								</select>
+							<div className="relative">
+								<h5 className="font-normal mb-0">
+									Order Status : {getOrderStatus(order?.isDelivered)}
+								</h5>
+
+								<div className="search-select mr-3 flex items-center space-x-3 ">
+									<span className="text-tiny inline-block leading-none -translate-y-[2px]">
+										Change Status :{' '}
+									</span>
+									<select
+										value={orderStatus}
+										onChange={(e) => setOrderStatus(e.target.value)}
+									>
+										<option value={'processing'}>Processing</option>
+										<option value={'shipped'}>Shipped</option>
+										<option value={'delivered'}>Delivered</option>
+										<option value={'refund'}>Refunded</option>
+										<option value={'cancelled'}>Cancelled</option>
+									</select>
+								</div>
 							</div>
 							<div className="product-add-btn flex ">
 								<button onClick={handleUpdateOrder} className="tp-btn ">
