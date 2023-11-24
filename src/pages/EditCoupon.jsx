@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { generateRandomCode } from '../hooks/RandomCode';
 import MultiSelectDropdown from './../components/MultiSelectDropdown';
 import imageIcon from './../../assets/img/icons/upload.png';
+import getError from '../hooks/getError';
 const EditCoupon = () => {
 	const { user, selectedProduct, setSelectedProduct } = useContext(AuthContext);
 	const apiUrl = import.meta.env.VITE_API_URL;
@@ -76,7 +77,8 @@ const EditCoupon = () => {
 					setCode(() => generateRandomCode());
 				})
 				.catch((error) => {
-					toast.error(error.message);
+					const message = getError(error);
+					toast.error(message);
 					console.log(error);
 				})
 				.finally(() => {

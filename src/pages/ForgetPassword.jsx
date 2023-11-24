@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import Loader from '../components/Loader';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import getError from '../hooks/getError';
 const ForgetPassword = () => {
 	const { user } = useContext(AuthContext);
 	const apiUrl = import.meta.env.VITE_API_URL;
@@ -35,14 +36,15 @@ const ForgetPassword = () => {
 					}
 				})
 				.catch((error) => {
-					console.log(error);
-					toast.error(error.message);
+					const message = getError(error);
+					toast.error(message);
 				})
 				.finally(() => {
 					setIsLoading(false);
 				});
 		} catch (error) {
-			console.log(error);
+			const message = getError(error);
+			toast.error(message);
 			setIsLoading(false);
 		}
 	};

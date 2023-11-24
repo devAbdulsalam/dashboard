@@ -4,13 +4,10 @@ import Table from './Table';
 import DownloadButton from './DownloadXlsx';
 import DebouncedInput from './DebouncedInput';
 
-const ParentTable = ({ data }) => {
+const ParentTable = ({ data, handelEdit, handelDelete }) => {
 	const [selectedStatus, setSelectedStatus] = useState('');
 	const [globalFilter, setGlobalFilter] = useState('');
 
-	const handelEdit = (value) => {
-		console.log(value);
-	};
 	const assetsColumns = [
 		{ Header: 'Name', accessor: 'name' },
 		{ Header: 'Purchase Price', accessor: 'purchasePrice' },
@@ -37,7 +34,10 @@ const ParentTable = ({ data }) => {
 								Edit
 							</span>
 						</button>
-						<button className="bg-white text-slate-700 border border-slate-200 hover:bg-danger hover:border-danger hover:text-white inline-block text-center leading-5 text-tiny font-medium pt-[6px] pb-[5px] px-4 rounded-md">
+						<button
+							onClick={() => handelDelete(row.original)}
+							className="bg-white text-slate-700 border border-slate-200 hover:bg-danger hover:border-danger hover:text-white inline-block text-center leading-5 text-tiny font-medium pt-[6px] pb-[5px] px-4 rounded-md"
+						>
 							<span className="text-[9px] inline-block -translate-y-[1px] mr-[1px]">
 								Delete
 							</span>

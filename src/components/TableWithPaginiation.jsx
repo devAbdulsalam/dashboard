@@ -37,12 +37,16 @@ const Table = ({ data, columns, globalFilter, pageSize, name, isLoading }) => {
 		setGlobalFilter(globalFilter);
 	}, [globalFilter, setGlobalFilter]);
 	return (
-		<div className="relative overflow-x-auto  mx-8 debug">
+		<div className="relative overflow-x-auto  mx-8">
 			{/* Table */}
 			<table {...getTableProps()} style={{ width: '100%' }}>
 				<thead className="bg-white">
 					{headerGroups.map((headerGroup, index) => (
-						<tr key={index} {...headerGroup.getHeaderGroupProps()}>
+						<tr
+							key={index}
+							{...headerGroup.getHeaderGroupProps()}
+							className="border-b border-gray 6 text-tiny"
+						>
 							{headerGroup.headers.map((column, index) => (
 								<th
 									key={index}
@@ -72,7 +76,7 @@ const Table = ({ data, columns, globalFilter, pageSize, name, isLoading }) => {
 									<tr
 										key={index}
 										{...row.getRowProps()}
-										className="bg-white border-b border-gray last:border-0 text-start debug"
+										className="bg-white border-b border-gray last:border-0 text-start"
 									>
 										{row.cells.map((cell, index) => (
 											<td

@@ -10,7 +10,7 @@ import {
 	Legend,
 	Tooltip,
 } from 'chart.js';
-const BarChart = ({ datasets, labels }) => {
+const BarChart = ({ data }) => {
 	ChartJS.register(
 		LinearScale,
 		CategoryScale,
@@ -20,17 +20,7 @@ const BarChart = ({ datasets, labels }) => {
 		Legend,
 		Tooltip
 	);
-	const data = {
-		labels,
-		datasets,
-		hoverOffset: 4,
-		borderWidth: 1,
-		backgroundColor: ['#50CD89', '#F1416C', '#3E97FF', '#ff9800'],
-		borderColor: ['#50CD89', '#F1416C', '#3E97FF', '#ff9800'],
-		options: {
-			responsive: true,
-		},
-	};
+	
 
 	return <Bar data={data} />;
 };

@@ -5,6 +5,7 @@ import Loader from '../components/Loader';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { LocalStorage } from '../hooks/LocalStorage';
+import getError from '../hooks/getError';
 import logo from './../../assets/img/bg/login-bg.jpg';
 const Login = () => {
 	const { user, setUser } = useContext(AuthContext);
@@ -45,14 +46,15 @@ const Login = () => {
 					}
 				})
 				.catch((error) => {
-					console.log(error);
-					toast.error(error.message);
+					const message = getError(error);
+					toast.error(message);
 				})
 				.finally(() => {
 					setIsLoading(false);
 				});
 		} catch (error) {
-			console.log(error);
+			const message = getError(error);
+			toast.error(message);
 			setIsLoading(false);
 		}
 	};

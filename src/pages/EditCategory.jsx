@@ -7,6 +7,7 @@ import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { fetchProductCategory } from '../hooks/axiosApis';
 import { Link, useNavigate } from 'react-router-dom';
 import SelectOptions from '../components/SelectOptions';
+import getError from '../hooks/getError';
 const EditCategory = () => {
 	const { user, selectedProduct, setSelectedProduct } = useContext(AuthContext);
 	const apiUrl = import.meta.env.VITE_API_URL;
@@ -101,7 +102,8 @@ const EditCategory = () => {
 					navigate('/category');
 				})
 				.catch((error) => {
-					toast.error(error.message);
+					const message = getError(error);
+					toast.error(message);
 					console.log(error);
 				})
 				.finally(() => {
@@ -109,6 +111,8 @@ const EditCategory = () => {
 				});
 		} catch (error) {
 			setLoading(false);
+			const message = getError(error);
+			toast.error(message);
 			console.log(error);
 		}
 	};

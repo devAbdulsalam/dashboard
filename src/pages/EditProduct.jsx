@@ -8,6 +8,7 @@ import axios from 'axios';
 import RadioInput from '../components/RadioInput';
 import { useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
+import getError from '../hooks/getError';
 const EditProduct = () => {
 	const { user, selectedProduct, setSelectedProduct } = useContext(AuthContext);
 	const apiUrl = import.meta.env.VITE_API_URL;
@@ -110,8 +111,8 @@ const EditProduct = () => {
 					navigate('/products');
 				})
 				.catch((error) => {
-					toast.error(error.message);
-					console.log(error);
+					const message = getError(error);
+					toast.error(message);
 				})
 				.finally(() => {
 					setIsLoading(false);
@@ -119,6 +120,8 @@ const EditProduct = () => {
 		} catch (error) {
 			setIsLoading(false);
 			console.log(error);
+			const message = getError(error);
+			toast.error(message);
 		}
 	};
 	const handleCancel = () => {
@@ -163,7 +166,7 @@ const EditProduct = () => {
 								<h3 className="mb-0 text-[28px]">Edit Product</h3>
 								<ul className="text-tiny font-medium flex items-center space-x-3 text-text3">
 									<li className="breadcrumb-item text-muted">
-										<Link to={'./'} className="text-hover-primary">
+										<Link to={'/'} className="text-hover-primary">
 											{' '}
 											Home
 										</Link>

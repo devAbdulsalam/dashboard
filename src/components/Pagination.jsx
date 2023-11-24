@@ -3,7 +3,7 @@ const Pagination = ({
 	state,
 	name,
 	// page,
-	// pageCount,
+	pageCount,
 	canPreviousPage,
 	previousPage,
 	nextPage,
@@ -13,7 +13,7 @@ const Pagination = ({
 		<div className="flex justify-between items-center flex-wrap mx-8">
 			<p className="mb-0 text-tiny">{`Showing ${
 				state.pageIndex + 1
-			} ${name} of ${state.pageSize}`}</p>
+			} ${name} of ${pageCount}`}</p>
 			<div className="pagination py-3 flex justify-end items-center  mx-8">
 				<button
 					onClick={() => previousPage()}
@@ -36,15 +36,22 @@ const Pagination = ({
 						/>
 					</svg>
 				</button>
-				<button className="inline-block rounded-md w-10 h-10 text-center leading-[33px] border border-gray mr-2 last:mr-0 hover:bg-theme hover:text-white hover:border-theme">
-					2
+				{canPreviousPage && (
+					<button className="inline-block rounded-md w-10 h-10 text-center leading-[33px] border border-gray mr-2 last:mr-0 hover:bg-theme hover:text-white hover:border-theme">
+						{state.pageIndex}
+					</button>
+				)}
+				<button
+					disabled
+					className="inline-block rounded-md w-10 h-10 text-center leading-[33px] border mr-2 last:mr-0 text-white bg-theme border-theme hover:bg-theme hover:text-white hover:border-theme"
+				>
+					{state.pageIndex + 1}
 				</button>
-				<button className="inline-block rounded-md w-10 h-10 text-center leading-[33px] border mr-2 last:mr-0 text-white bg-theme border-theme hover:bg-theme hover:text-white hover:border-theme">
-					3
-				</button>
-				<button className="inline-block rounded-md w-10 h-10 text-center leading-[33px] border border-gray mr-2 last:mr-0 hover:bg-theme hover:text-white hover:border-theme">
-					4
-				</button>
+				{canNextPage && (
+					<button className="inline-block rounded-md w-10 h-10 text-center leading-[33px] border border-gray mr-2 last:mr-0 hover:bg-theme hover:text-white hover:border-theme">
+						{state.pageIndex + 2}
+					</button>
+				)}
 				<button
 					onClick={() => nextPage()}
 					disabled={!canNextPage}

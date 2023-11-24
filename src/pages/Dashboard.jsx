@@ -1,6 +1,4 @@
 /* eslint-disable react/prop-types */
-// Fragment, useState,
-// import React from 'react'
 import { useContext, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchDashboard } from '../hooks/axiosApis';
@@ -42,6 +40,12 @@ const Dashboard = () => {
 		}
 	}, [data, error]);
 
+	const handleDelete = () => {
+		// console.log(item);
+	};
+	const handleEdit = () => {
+		// console.log(item);
+	};
 	return (
 		<>
 			<div className="body-content px-8 py-8 bg-slate-100">
@@ -527,7 +531,7 @@ const Dashboard = () => {
 						<div className="chart-single bg-white p-4 sm:p-10 rounded-md">
 							<h3 className="text-xl mb-8">Most Selling Category</h3>
 							<div className="md:h-[252px] 2xl:h-[398px] w-full ">
-								<SellingCategory data={[]} />
+								<SellingCategory sales={data?.topSalesItems || []} />
 							</div>
 						</div>
 					</div>
@@ -669,6 +673,8 @@ const Dashboard = () => {
 				<DashboardProductTable
 					data={data?.recentProducts || []}
 					isLoading={isLoading}
+					handleDelete={handleDelete}
+					handleEdit={handleEdit}
 				/>
 			</div>
 			{isLoading && <Loader />}
