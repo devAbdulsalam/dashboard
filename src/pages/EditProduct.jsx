@@ -11,6 +11,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import getError from '../hooks/getError';
 import { fetchProductCategoryAndSubCategory } from '../hooks/axiosApis';
 import CategorySelector from '../components/CategorySelector';
+import imageIcon from './../../assets/img/icons/upload.png';
 import Tags from '../components/Tags';
 const EditProduct = () => {
 	const { user, selectedProduct, setSelectedProduct } = useContext(AuthContext);
@@ -498,10 +499,7 @@ const EditProduct = () => {
 												{!image ? (
 													<img
 														className="w-[100px] h-auto mx-auto"
-														src={
-															selectedProduct?.image?.url ||
-															'assets/img/icons/upload.png'
-														}
+														src={selectedProduct?.image?.url || imageIcon}
 														alt=""
 													/>
 												) : (

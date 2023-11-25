@@ -19,15 +19,19 @@ const EditCoupon = () => {
 		}
 		console.log(selectedProduct);
 	}, [selectedProduct, navigate]);
-	const [name, setName] = useState('');
-	const [description, setDescription] = useState('');
-	const [code, setCode] = useState(() => generateRandomCode());
-	const [endTime, setEndTime] = useState('');
-	const [startTime, setStartTime] = useState('');
-	const [amount, setAmount] = useState('');
-	const [available, setAvailable] = useState('');
-	const [minAmount, setMinAmount] = useState('');
-	const [type, setType] = useState('');
+	const [name, setName] = useState(selectedProduct.name || '');
+	const [description, setDescription] = useState(
+		selectedProduct.description || ''
+	);
+	const [code, setCode] = useState(
+		selectedProduct.code || generateRandomCode()
+	);
+	const [endTime, setEndTime] = useState(selectedProduct.endTime || '');
+	const [startTime, setStartTime] = useState(selectedProduct.startTime || '');
+	const [amount, setAmount] = useState(selectedProduct.amount || 0);
+	const [available, setAvailable] = useState(selectedProduct.available || 0);
+	const [minAmount, setMinAmount] = useState(selectedProduct.slug || '');
+	const [type, setType] = useState(selectedProduct.type || '');
 	const [selectedOptions, setSelectedOptions] = useState([]);
 	const [image, setImage] = useState(null);
 	const [imageName, setImageName] = useState(null);
@@ -68,7 +72,7 @@ const EditCoupon = () => {
 				formData.append('image', imageFile);
 			}
 			axios
-				.patch(`${apiUrl}/products/${selectedProduct._id}`, formData, config)
+				.patch(`${apiUrl}/coupons/${selectedProduct._id}`, formData, config)
 				.then((res) => {
 					if (res.data) {
 						toast.success('Coupon updated successfully');
@@ -158,7 +162,7 @@ const EditCoupon = () => {
 								{!image ? (
 									<img
 										className="w-[100px] h-auto mx-auto"
-										src={imageIcon}
+										src={selectedProduct?.image?.url || imageIcon}
 										alt="coupon"
 									/>
 								) : (

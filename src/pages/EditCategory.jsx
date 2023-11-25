@@ -7,6 +7,7 @@ import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { fetchProductCategory } from '../hooks/axiosApis';
 import { Link, useNavigate } from 'react-router-dom';
 import SelectOptions from '../components/SelectOptions';
+import imageIcon from './../../assets/img/icons/upload.png';
 import getError from '../hooks/getError';
 const EditCategory = () => {
 	const { user, selectedProduct, setSelectedProduct } = useContext(AuthContext);
@@ -213,10 +214,7 @@ const EditCategory = () => {
 												{!image ? (
 													<img
 														className="w-[100px] h-auto mx-auto"
-														src={
-															selectedProduct?.image?.url ||
-															'assets/img/icons/upload.png'
-														}
+														src={selectedProduct?.image?.url || imageIcon}
 														alt=""
 													/>
 												) : (

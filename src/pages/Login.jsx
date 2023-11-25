@@ -22,7 +22,7 @@ const Login = () => {
 	});
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		if (!email.trim() || password.trim()) {
+		if (!email.trim() || !password.trim()) {
 			return toast.error('Email and password  is required!');
 		}
 		try {
