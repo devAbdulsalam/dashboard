@@ -8,6 +8,7 @@ import Loader from '../components/Loader';
 import { Link, useNavigate } from 'react-router-dom';
 import { Dialog, Transition } from '@headlessui/react';
 import axios from 'axios';
+import getError from '../hooks/getError';
 const ProductGrid = () => {
 	const { user, selectedProduct, setSelectedProduct } = useContext(AuthContext);
 	const navigate = useNavigate();
@@ -69,8 +70,8 @@ const ProductGrid = () => {
 					queryClient.invalidateQueries(['products']);
 				})
 				.catch((error) => {
-					toast.error(error.message);
-					console.log(error);
+					const message = getError(error);
+					toast.error(message);
 				})
 				.finally(() => {
 					setLoading(false);

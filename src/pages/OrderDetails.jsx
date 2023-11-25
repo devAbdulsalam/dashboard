@@ -10,6 +10,7 @@ import formatDateString from '../hooks/formatDateString';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import getOrderStatus from '../hooks/getOrderStatus';
+import getError from '../hooks/getError';
 const OrderDetails = () => {
 	const { user } = useContext(AuthContext);
 	const [order, setOrder] = useState('');
@@ -57,8 +58,8 @@ const OrderDetails = () => {
 					queryClient.invalidateQueries(['orders', 'order']);
 				})
 				.catch((error) => {
-					toast.error(error.message);
-					console.log(error);
+					const message = getError(error);
+					toast.error(message);
 				})
 				.finally(() => {
 					setLoading(false);

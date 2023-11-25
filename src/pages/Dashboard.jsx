@@ -5,7 +5,7 @@ import { fetchDashboard } from '../hooks/axiosApis';
 import AuthContext from '../context/authContext';
 import toast from 'react-hot-toast';
 import Loader from '../components/Loader';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import DashboardOrderTable from '../components/DashboardOrderTable';
 import DashboardProductTable from '../components/DashboardProductTable';
 import SalesStat from '../components/SalesStat';
@@ -23,8 +23,8 @@ import SellingCategory from '../components/SellingCategory';
 // 			newUsers,
 // 			percentageNewUsers,
 const Dashboard = () => {
-	const { user } = useContext(AuthContext);
-	// const navigate = useNavigate();
+	const { user, setSelectedProduct } = useContext(AuthContext);
+	const navigate = useNavigate();
 	const { data, isLoading, error } = useQuery(['dashboard'], async () =>
 		fetchDashboard(user)
 	);
@@ -43,8 +43,9 @@ const Dashboard = () => {
 	const handleDelete = () => {
 		// console.log(item);
 	};
-	const handleEdit = () => {
-		// console.log(item);
+	const handleEdit = (product) => {
+		setSelectedProduct(product);
+		navigate(`/products/${product._id}/edit`);
 	};
 	return (
 		<>

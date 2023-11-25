@@ -3,6 +3,7 @@ const Pagination = ({
 	state,
 	name,
 	// page,
+	gotoPage,
 	pageCount,
 	canPreviousPage,
 	previousPage,
@@ -18,9 +19,7 @@ const Pagination = ({
 				<button
 					onClick={() => previousPage()}
 					disabled={!canPreviousPage}
-					className="inline-block rounded-md w-10 h-10 text-center
-					leading-[33px] border border-gray mr-2 last:mr-0 hover:bg-theme
-					hover:text-white hover:border-theme"
+					className="inline-block rounded-md w-10 h-10 text-center leading-[33px] border border-gray mr-2 last:mr-0 hover:bg-theme	hover:text-white hover:border-theme"
 				>
 					<svg
 						className="-translate-y-[2px] -translate-x-px"
@@ -37,7 +36,10 @@ const Pagination = ({
 					</svg>
 				</button>
 				{canPreviousPage && (
-					<button className="inline-block rounded-md w-10 h-10 text-center leading-[33px] border border-gray mr-2 last:mr-0 hover:bg-theme hover:text-white hover:border-theme">
+					<button
+						onClick={() => gotoPage(state.pageIndex - 1)}
+						className="inline-block rounded-md w-10 h-10 text-center leading-[33px] border border-gray mr-2 last:mr-0 hover:bg-theme hover:text-white hover:border-theme"
+					>
 						{state.pageIndex}
 					</button>
 				)}
@@ -48,7 +50,10 @@ const Pagination = ({
 					{state.pageIndex + 1}
 				</button>
 				{canNextPage && (
-					<button className="inline-block rounded-md w-10 h-10 text-center leading-[33px] border border-gray mr-2 last:mr-0 hover:bg-theme hover:text-white hover:border-theme">
+					<button
+						onClick={() => gotoPage(state.pageIndex + 1)}
+						className="inline-block rounded-md w-10 h-10 text-center leading-[33px] border border-gray mr-2 last:mr-0 hover:bg-theme hover:text-white hover:border-theme"
+					>
 						{state.pageIndex + 2}
 					</button>
 				)}

@@ -5,6 +5,7 @@ import Loader from '../components/Loader';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from './../../assets/img/bg/login-bg.jpg';
+import getError from '../hooks/getError';
 const Register = () => {
 	const { user } = useContext(AuthContext);
 	const apiUrl = import.meta.env.VITE_API_URL;
@@ -47,8 +48,8 @@ const Register = () => {
 					navigate('/login');
 				})
 				.catch((error) => {
-					console.log(error);
-					toast.error(error.message);
+					const message = getError(error);
+					toast.error(message);
 				})
 				.finally(() => {
 					setIsLoading(false);

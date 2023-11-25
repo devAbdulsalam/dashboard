@@ -9,6 +9,7 @@ import axios from 'axios';
 import { useQueryClient } from '@tanstack/react-query';
 import { Dialog, Transition } from '@headlessui/react';
 import { Link } from 'react-router-dom';
+import getError from '../hooks/getError';
 const CustomersList = () => {
 	const { user, selectedProduct, setSelectedProduct } = useContext(AuthContext);
 	const queryClient = useQueryClient();
@@ -76,8 +77,8 @@ const CustomersList = () => {
 					queryClient.invalidateQueries(['customers']);
 				})
 				.catch((error) => {
-					console.log(error);
-					toast.error(error.message);
+					const message = getError(error);
+					toast.error(message);
 				})
 				.finally(() => {
 					setLoading(false);

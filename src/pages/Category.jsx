@@ -11,6 +11,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Dialog, Transition } from '@headlessui/react';
 import SelectOptions from '../components/SelectOptions';
 import imageIcon from './../../assets/img/icons/upload.png';
+import getError from '../hooks/getError';
 const Category = () => {
 	const { user, selectedProduct, setSelectedProduct } = useContext(AuthContext);
 	const apiUrl = import.meta.env.VITE_API_URL;
@@ -110,8 +111,8 @@ const Category = () => {
 					setLoading(false);
 				})
 				.catch((error) => {
-					toast.error(error.message);
-					console.log(error);
+					const message = getError(error);
+					toast.error(message);
 				})
 				.finally(() => {
 					setLoading(false);
@@ -183,6 +184,7 @@ const Category = () => {
 		}
 		try {
 			setLoading(true);
+			setShowDeleteProductModal(false);
 			axios
 				.delete(`${apiUrl}/products/category/${category._id}`, config)
 				.then((res) => {
@@ -194,8 +196,8 @@ const Category = () => {
 					queryClient.invalidateQueries(['category']);
 				})
 				.catch((error) => {
-					console.log(error);
-					toast.error(error.message);
+					const message = getError(error);
+					toast.error(message);
 				})
 				.finally(() => {
 					setLoading(false);
@@ -632,6 +634,7 @@ const Category = () => {
 											</div>
 										</div>
 										<button
+											disabled={isLoading || loading}
 											className="bg-red-500 hover:bg-red-400 text-white font-semibold h-10 py-1 w-full flex items-center justify-center rounded-md transition-all duration-500 ease-in-out"
 											onClick={() =>
 												handleDeleteProductCategory(selectedProduct)

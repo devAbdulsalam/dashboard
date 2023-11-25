@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import PaymentCheckbox from '../components/PaymentCheckBox';
 import { fetchSite } from '../hooks/axiosApis';
+import getError from '../hooks/getError';
 // import { LocalStorage } from '../hooks/LocalStorage';
 const Currencies = [
 	{
@@ -139,8 +140,8 @@ const SiteSetting = () => {
 					}
 				})
 				.catch((error) => {
-					console.log(error);
-					toast.error(error.message);
+					const message = getError(error);
+					toast.error(message);
 				})
 				.finally(() => {
 					setIsLoading(false);

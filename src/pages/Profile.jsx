@@ -8,6 +8,7 @@ import Loader from '../components/Loader';
 // import { useNavigate } from 'react-router-dom';
 // import { Dialog, Transition } from '@headlessui/react';
 import axios from 'axios';
+import getError from '../hooks/getError';
 
 const Profile = () => {
 	const { user, setUser } = useContext(AuthContext);
@@ -79,8 +80,8 @@ const Profile = () => {
 					queryClient.invalidateQueries(['user']);
 				})
 				.catch((error) => {
-					toast.error(error.message);
-					console.log(error);
+					const message = getError(error);
+					toast.error(message);
 				})
 				.finally(() => {
 					setLoading(false);
@@ -120,8 +121,8 @@ const Profile = () => {
 					queryClient.invalidateQueries(['user']);
 				})
 				.catch((error) => {
-					toast.error(error.message);
-					console.log(error);
+					const message = getError(error);
+					toast.error(message);
 				})
 				.finally(() => {
 					setLoading(false);
@@ -157,8 +158,8 @@ const Profile = () => {
 					queryClient.invalidateQueries(['user']);
 				})
 				.catch((error) => {
-					toast.error(error.message);
-					console.log(error);
+					const message = getError(error);
+					toast.error(message);
 				})
 				.finally(() => {
 					setLoading(false);

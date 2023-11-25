@@ -1,5 +1,5 @@
 // import React from 'react'
-// import { useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useState, useContext, useEffect, useRef } from 'react';
 import AuthContext from '../context/authContext';
 import toast from 'react-hot-toast';
@@ -9,6 +9,9 @@ import RadioInput from '../components/RadioInput';
 import { useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import getError from '../hooks/getError';
+import { fetchProductCategoryAndSubCategory } from '../hooks/axiosApis';
+import CategorySelector from '../components/CategorySelector';
+import Tags from '../components/Tags';
 const EditProduct = () => {
 	const { user, selectedProduct, setSelectedProduct } = useContext(AuthContext);
 	const apiUrl = import.meta.env.VITE_API_URL;
@@ -22,9 +25,9 @@ const EditProduct = () => {
 	const [addProductTab, setAddProductTab] = useState(1);
 	const [name, setName] = useState(selectedProduct?.name);
 	const [description, setDescription] = useState(selectedProduct?.description);
-	const [price, setPrice] = useState(selectedProduct?.price);
+	const [price, setPrice] = useState(selectedProduct?.price || 0);
 	const [sku, setSku] = useState(selectedProduct?.sku);
-	const [quantity, setQuantity] = useState(selectedProduct?.quantity);
+	const [quantity, setQuantity] = useState(selectedProduct?.quantity || 0);
 	const [vat, setVat] = useState(selectedProduct?.vat || 0);
 	const [height, setHeight] = useState(selectedProduct?.height || 0);
 	const [weight, setWeight] = useState(selectedProduct?.weight || 0);
@@ -34,10 +37,10 @@ const EditProduct = () => {
 	const [discountType, setDiscountType] = useState(
 		selectedProduct?.discountType
 	);
-	const [discount, setDiscount] = useState(selectedProduct?.discount);
+	const [discount, setDiscount] = useState(selectedProduct?.discount || 0);
 	const [color, setColor] = useState(selectedProduct?.color);
 	const [size, setsize] = useState(selectedProduct?.size);
-	const [tag, setTag] = useState(selectedProduct?.tag);
+	const [tags, setTags] = useState(selectedProduct?.tags || []);
 	const [subCategory, setSubCategory] = useState(selectedProduct?.subCategory);
 	const [category, setCategory] = useState(selectedProduct?.category);
 	const [image, setImage] = useState(null);
@@ -45,6 +48,20 @@ const EditProduct = () => {
 	const [imageFile, setImageFile] = useState(null);
 	const hiddenFileInput = useRef(null);
 	const [isLoading, setIsLoading] = useState(null);
+	const [categories, setCategories] = useState([]);
+	const { data, error } = useQuery(['product-category'], async () =>
+		fetchProductCategoryAndSubCategory(user)
+	);
+	useEffect(() => {
+		if (data && data.length > 0) {
+			setCategories(data);
+			// console.log(data);
+		}
+		if (error) {
+			const message = getError(error);
+			toast.error(message);
+		}
+	}, [data, error]);
 	const queryClient = useQueryClient();
 	const config = {
 		headers: {
@@ -73,7 +90,7 @@ const EditProduct = () => {
 			height,
 			category,
 			subCategory,
-			tags: tag,
+			tags,
 			size,
 			color,
 		};
@@ -99,14 +116,17 @@ const EditProduct = () => {
 			for (const key in data) {
 				formData.append(key, data[key]);
 			}
-			formData.append('image', imageFile);
+			if (imageFile) {
+				formData.append('image', imageFile);
+				console.log(tags);
+			}
 			axios
 				.patch(`${apiUrl}/products/${selectedProduct._id}`, formData, config)
 				.then((res) => {
 					if (res.data) {
 						toast.success('Product updated successfully');
 					}
-					console.log(res);
+					// console.log(res.data);
 					queryClient.invalidateQueries(['products']);
 					navigate('/products');
 				})
@@ -520,42 +540,17 @@ const EditProduct = () => {
 												Product Details
 											</p>
 											<div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
-												<div className="category-select select-bordered">
-													<h5 className="text-tiny mb-1">Category</h5>
-													<select
-														value={category}
-														onChange={(e) => setCategory(e.target.value)}
-													>
-														<option value="Electronics">Electronics</option>
-														<option value="Fashion">Fashion</option>
-														<option value="Jewellery">Jewellery</option>
-														<option value="Beauty">Beauty</option>
-														<option value="Grocery">Grocery</option>
-													</select>
-												</div>
-												<div className="sub-category-select select-bordered">
-													<h5 className="text-tiny mb-1">Sub Category</h5>
-													<select
-														value={subCategory}
-														onChange={(e) => setSubCategory(e.target.value)}
-													>
-														<option value="Electronics">Electronics</option>
-														<option value="Fashion">Fashion</option>
-														<option value="Jewellery">Jewellery</option>
-														<option value="Beauty">Beauty</option>
-														<option value="Grocery">Grocery</option>
-													</select>
-												</div>
+												<CategorySelector
+													categories={categories}
+													selectedCategory={category}
+													setSelectedCategory={setCategory}
+													selectedSubcategory={subCategory}
+													setSelectedSubcategory={setSubCategory}
+												/>
 											</div>
 											<div className="mb-5">
 												<p className="mb-0 text-base text-black">Tags</p>
-												<input
-													type="text"
-													id="tag-input1"
-													className="hidden"
-													value={tag}
-													onChange={(e) => setTag(e.target.value)}
-												/>
+												<Tags tags={tags} setTags={setTags} />
 											</div>
 										</div>
 										<div className="bg-white px-8 py-8 rounded-md">

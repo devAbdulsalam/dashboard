@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import Tags from '../components/Tags';
 import CategorySelector from '../components/CategorySelector';
 import imageIcon from './../../assets/img/icons/upload.png';
+import getError from '../hooks/getError';
 const AddProduct = () => {
 	const { user } = useContext(AuthContext);
 	const token = user?.token;
@@ -49,6 +50,8 @@ const AddProduct = () => {
 			// console.log(data);
 		}
 		if (error) {
+			const message = getError(error);
+			toast.error(message);
 			console.log(error);
 		}
 	}, [data, error]);
@@ -114,13 +117,13 @@ const AddProduct = () => {
 					if (res.data) {
 						toast.success('Product added successfully');
 					}
-					console.log(res);
+					// console.log(res.data);
 					queryClient.invalidateQueries(['products']);
 					navigate('/products');
 				})
 				.catch((error) => {
-					toast.error(error.message);
-					console.log(error);
+					const message = getError(error);
+					toast.error(message);
 				})
 				.finally(() => {
 					setIsLoading(false);
@@ -151,8 +154,8 @@ const AddProduct = () => {
 					// LocalStorage.set('token', user.token);
 				})
 				.catch((error) => {
-					console.log(error);
-					toast.error(error.message);
+					const message = getError(error);
+					toast.error(message);
 				})
 				.finally(() => {
 					setIsLoading(false);

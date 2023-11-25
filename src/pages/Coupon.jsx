@@ -10,6 +10,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Dialog, Transition } from '@headlessui/react';
 import { Link, useNavigate } from 'react-router-dom';
 import formatDateString from '../hooks/formatDateString';
+import getError from '../hooks/getError';
 const Coupon = () => {
 	const { user, selectedProduct, setSelectedProduct } = useContext(AuthContext);
 	// const navigate = useNavigate();
@@ -69,6 +70,7 @@ const Coupon = () => {
 		}
 		try {
 			setLoading(true);
+			setShowDeleteProductModal(false);
 			axios
 				.post(`${apiUrl}/coupons/${coupon._id}`, config)
 				.then((res) => {
@@ -80,8 +82,8 @@ const Coupon = () => {
 					queryClient.invalidateQueries(['coupon']);
 				})
 				.catch((error) => {
-					console.log(error);
-					toast.error(error.message);
+					const message = getError(error);
+					toast.error(message);
 				})
 				.finally(() => {
 					setLoading(false);
@@ -328,6 +330,7 @@ const Coupon = () => {
 														</div>
 														<div className="relative">
 															<button
+																disabled={isLoading || loading}
 																className="w-10 h-10 leading-[33px] text-tiny bg-white border border-gray text-slate-600 rounded-md hover:bg-danger hover:border-danger hover:text-white"
 																onMouseEnter={() =>
 																	handleMouseEnterDelete(coupon._id)
@@ -479,6 +482,7 @@ const Coupon = () => {
 											</p>
 										</div>
 										<button
+											disabled={isLoading || loading}
 											className="bg-red-400 hover:bg-red-600 text-white h-10 w-full flex items-center justify-center rounded-md"
 											onClick={() => handleDeleteCoupon(selectedProduct)}
 										>

@@ -86,7 +86,9 @@ const EditCategory = () => {
 			for (const key in data) {
 				formData.append(key, data[key]);
 			}
-			formData.append('image', imageFile);
+			if (imageFile) {
+				formData.append('image', imageFile);
+			}
 			axios
 				.patch(
 					`${apiUrl}/products/category/${selectedProduct._id}`,

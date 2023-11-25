@@ -19,6 +19,7 @@ const Table = ({ data, columns, globalFilter, pageSize, name, isLoading }) => {
 		setGlobalFilter,
 		page,
 		nextPage,
+		gotoPage,
 		pageCount,
 		previousPage,
 		canNextPage,
@@ -114,6 +115,7 @@ const Table = ({ data, columns, globalFilter, pageSize, name, isLoading }) => {
 				canPreviousPage={canPreviousPage}
 				canNextPage={canNextPage}
 				nextPage={nextPage}
+				gotoPage={gotoPage}
 				name={name}
 			/>
 		</div>

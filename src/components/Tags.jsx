@@ -5,7 +5,7 @@ import { TiDelete } from 'react-icons/ti';
 const Tags = ({ tags, setTags }) => {
 	const [tag, setTag] = useState('');
 	const handleAddTag = (tag) => {
-		if (tag === '') {
+		if (!tag.trim()) {
 			return;
 		}
 		if (tags.length > 5) {
@@ -19,7 +19,7 @@ const Tags = ({ tags, setTags }) => {
 			toast.error('tag already added');
 			return;
 		}
-		setTags([...tags, tag.toLowerCase()]);
+		setTags((prev) => [...prev, tag.toLowerCase()]);
 		setTag('');
 	};
 	const handleDelete = (tag) => {
@@ -47,7 +47,7 @@ const Tags = ({ tags, setTags }) => {
 						</div>
 					))}
 			</div>
-			<div className="mt-1">
+			<div className="search-input relative mt-1">
 				<input
 					type="text"
 					id="tag-input1"
@@ -60,6 +60,12 @@ const Tags = ({ tags, setTags }) => {
 						}
 					}}
 				/>
+				<button
+					onClick={handelEnter}
+					className="absolute top-1/2 right-5 translate-y-[-50%] hover:text-theme"
+				>
+					Add
+				</button>
 			</div>
 		</div>
 	);

@@ -6,6 +6,7 @@ import AuthContext from '../context/authContext';
 import toast from 'react-hot-toast';
 import Loader from '../components/Loader';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import getError from '../hooks/getError';
 const Transaction = () => {
 	const { user, selectedProduct, setSelectedProduct } = useContext(AuthContext);
 	const [transaction, setTransaction] = useState('');
@@ -29,8 +30,8 @@ const Transaction = () => {
 			// navigate('/');/
 		}
 		if (error) {
-			console.log(error);
-			toast.error(error?.message);
+			const message = getError(error);
+			toast.error(message);
 		}
 	}, [data, transaction, error]);
 	return (

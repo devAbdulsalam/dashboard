@@ -6,6 +6,7 @@ import AuthContext from '../context/authContext';
 import toast from 'react-hot-toast';
 import Loader from '../components/Loader';
 import { Link } from 'react-router-dom';
+import getError from '../hooks/getError';
 const Transaction = () => {
 	const { user, setSelectedProduct } = useContext(AuthContext);
 	const { data, isLoading, error } = useQuery(['transactions'], async () =>
@@ -18,7 +19,8 @@ const Transaction = () => {
 		}
 		if (error) {
 			console.log(error);
-			toast.error(error?.message);
+			const message = getError(error);
+			toast.error(message);
 		}
 	}, [data, error]);
 	const [showEditTooltip, setShowEditTooltip] = useState(false);

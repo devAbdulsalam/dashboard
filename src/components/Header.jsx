@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Dialog, Transition } from '@headlessui/react';
 import { LocalStorage } from '../hooks/LocalStorage';
 import AuthContext from '../context/authContext';
+import Search from '../components/Search';
 const Header = ({ sideMenu, setSideMenu }) => {
 	const [searchOverlay, setSearchOverlay] = useState(false);
 	const [userOption, setUserOption] = useState(false);
@@ -62,40 +63,9 @@ const Header = ({ sideMenu, setSideMenu }) => {
 							</svg>
 						</button>
 						<div className="w-[30%] hidden md:block">
-							<form action="#">
-								<div className="w-[250px] relative">
-									<input
-										className="input h-12 w-full pr-[45px]"
-										type="text"
-										placeholder="Search Here..."
-									/>
-									<button className="absolute top-1/2 right-6 translate-y-[-50%] hover:text-theme">
-										<svg
-											className="-translate-y-[2px]"
-											width="16"
-											height="16"
-											viewBox="0 0 20 20"
-											fill="none"
-											xmlns="http://www.w3.org/2000/svg"
-										>
-											<path
-												d="M9 17C13.4183 17 17 13.4183 17 9C17 4.58172 13.4183 1 9 1C4.58172 1 1 4.58172 1 9C1 13.4183 4.58172 17 9 17Z"
-												stroke="currentColor"
-												strokeWidth="2"
-												strokeLinecap="round"
-												strokeLinejoin="round"
-											></path>
-											<path
-												d="M18.9999 19L14.6499 14.65"
-												stroke="currentColor"
-												strokeWidth="2"
-												strokeLinecap="round"
-												strokeLinejoin="round"
-											></path>
-										</svg>
-									</button>
-								</div>
-							</form>
+							<div className="w-[250px] relative">
+								<Search />
+							</div>
 						</div>
 					</div>
 
@@ -429,40 +399,9 @@ const Header = ({ sideMenu, setSideMenu }) => {
 							: ' -translate-y-[230px] lg:translate-y-[0]'
 					}`}
 				>
-					<form action="#" className="">
-						<div className="relative mb-3">
-							<input
-								className="input h-12 w-full pr-[45px]"
-								type="text"
-								placeholder="Search Here..."
-							/>
-							<button className="absolute top-1/2 right-6 translate-y-[-50%] hover:text-theme">
-								<svg
-									className="-translate-y-[2px]"
-									width="16"
-									height="16"
-									viewBox="0 0 20 20"
-									fill="none"
-									xmlns="http://www.w3.org/2000/svg"
-								>
-									<path
-										d="M9 17C13.4183 17 17 13.4183 17 9C17 4.58172 13.4183 1 9 1C4.58172 1 1 4.58172 1 9C1 13.4183 4.58172 17 9 17Z"
-										stroke="currentColor"
-										strokeWidth="2"
-										strokeLinecap="round"
-										strokeLinejoin="round"
-									></path>
-									<path
-										d="M18.9999 19L14.6499 14.65"
-										stroke="currentColor"
-										strokeWidth="2"
-										strokeLinecap="round"
-										strokeLinejoin="round"
-									></path>
-								</svg>
-							</button>
-						</div>
-					</form>
+					<div className="relative mb-3">
+						<Search />
+					</div>
 					<div className="">
 						<span className="text-tiny mr-2">Keywords :</span>
 						<Link

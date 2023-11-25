@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useQueryClient } from '@tanstack/react-query';
 import { Dialog, Transition } from '@headlessui/react';
+import getError from '../hooks/getError';
 const Order = () => {
 	const { user, selectedProduct, setSelectedProduct } = useContext(AuthContext);
 	const queryClient = useQueryClient();
@@ -79,8 +80,8 @@ const Order = () => {
 					queryClient.invalidateQueries(['orders', 'order']);
 				})
 				.catch((error) => {
-					console.log(error);
-					toast.error(error.message);
+					const message = getError(error);
+					toast.error(message);
 				})
 				.finally(() => {
 					setLoading(false);
@@ -97,7 +98,7 @@ const Order = () => {
 		try {
 			setLoading(true);
 			axios
-				.delete(`${apiUrl}/order/search`, config)
+				.post(`${apiUrl}/order/search`, config)
 				.then((res) => {
 					console.log(res);
 					if (res.data) {
@@ -107,8 +108,8 @@ const Order = () => {
 					queryClient.invalidateQueries(['category']);
 				})
 				.catch((error) => {
-					console.log(error);
-					toast.error(error.message);
+					const message = getError(error);
+					toast.error(message);
 				})
 				.finally(() => {
 					setLoading(false);
@@ -508,6 +509,7 @@ const Order = () => {
 											</p>
 										</div>
 										<button
+											disabled={isLoading || loading}
 											className="bg-red-400 hover:bg-red-600 text-white h-10 w-full flex items-center justify-center rounded-md"
 											onClick={() => handleDeleteOrder(selectedProduct)}
 										>
